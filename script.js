@@ -220,8 +220,8 @@ document.getElementById("btnConfirmarPedido").onclick = () => {
       🧾 Pedido de ${nombre}<br>
       ${resumen}<br>
       💰 Total: $${fmtCOP(total)}
-    </div>*/
-  `;
+    </div>
+  `;*/
 
   document.getElementById("metodosPago").style.display = "flex";
   document.getElementById("btnConfirmarPedido").disabled = true;
