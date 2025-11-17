@@ -11,7 +11,7 @@
     "nombre": "Hamburguesa Doble Carne",
     "precio": 32000,
     "tallas": "N/A",
-    "imagen": "img/Hamburguesa Doble Carne.png"
+    "imagen": "img/Hamburguesa-Doble-Carne.png"
   },
   {
     "id": "P003",
@@ -25,7 +25,7 @@
     "nombre": "Panes Comidas Rapidas",
     "precio": 50000,
     "tallas": "N/A",
-    "imagen": "img/Panes Surtidos.png"
+    "imagen": "img/Panes-Surtidos.png"
   },
    {
     "id": "P005",
@@ -54,12 +54,5 @@
     "precio": 90000,
     "tallas": "26 a 33",
     "imagen": "img/sandalias-stella.jpeg"
-  },
-  {
-    "id": "P009",
-    "nombre": "Cordones alpargatas",
-    "precio": 1500,
-    "tallas": "Colores surtidos",
-    "imagen": "img/cordones-alpargatas.jpeg"
   }
 ]
