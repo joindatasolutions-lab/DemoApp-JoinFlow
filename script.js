@@ -180,7 +180,7 @@ document.getElementById("btnContinuarPedido").onclick = () => {
   const resumen = state.cart.map(p => `${p.qty}× ${p.nombre} (Talla ${p.talla})`).join(" | ");
   const subtotal = state.cart.reduce((a, b) => a + b.precio * b.qty, 0);
 
-  document.getElementById("resumenProducto").textContent =
+  document.getElementById("resumenProducto").innerHTML =
     `🛍 ${resumen} — Subtotal: $${fmtCOP(subtotal)}`;
 
   show("viewForm");
@@ -229,7 +229,7 @@ document.getElementById("btnConfirmarPedido").onclick = () => {
 
   const total = state.cart.reduce((a, b) => a + b.precio * b.qty, 0);
   const resumen = state.cart.map(p => `${p.qty}× ${p.nombre} (Talla ${p.talla})`).join("\n");
-  document.getElementById("resumenProducto").textContent =
+  document.getElementById("resumenProducto").innerHTML =
     `🧾 Pedido de ${nombre}\n${resumen}\n💰 Total: $${fmtCOP(total)}`;
 
   document.getElementById("metodosPago").style.display = "flex";
