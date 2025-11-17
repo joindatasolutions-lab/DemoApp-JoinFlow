@@ -3,29 +3,29 @@
     "id": "P001",
     "nombre": "Pizza-Dupla-Hawaiana-Pepperoni",
     "precio": 40000,
-    "tallas": "L",
+    "tallas": "S a XL",
     "imagen": "img/Pizza-Dupla-Hawaiana-Pepperoni.png"
   },
   {
     "id": "P002",
-    "nombre": "Alpargatas Anjana 1",
-    "precio": 130000,
-    "tallas": "23 a 32",
-    "imagen": "img/alpargatas-anjana-1.jpeg"
+    "nombre": "Hamburguesa Doble Carne",
+    "precio": 32000,
+    "tallas": "N/A",
+    "imagen": "img/Hamburguesa Doble Carne.png"
   },
   {
     "id": "P003",
-    "nombre": "lista-insumos",
+    "nombre": "Lista Insumos Comidas Rapidas",
     "precio": 130000,
     "tallas": "N/A",
     "imagen": "img/lista-insumos.png"
   },
   {
     "id": "P004",
-    "nombre": "Alpargatas Ari Lila 1",
-    "precio": 130000,
-    "tallas": "23 a 26",
-    "imagen": "img/alpargatas-ari-lila-1.jpeg"
+    "nombre": "Panes Comidas Rapidas",
+    "precio": 50000,
+    "tallas": "N/A",
+    "imagen": "img/Panes Surtidos.png"
   },
    {
     "id": "P005",
