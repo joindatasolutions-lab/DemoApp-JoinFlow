@@ -215,12 +215,12 @@ document.getElementById("btnConfirmarPedido").onclick = () => {
     .map(p => `${p.qty}× ${p.nombre} (Talla ${p.talla})`)
     .join("<br>");
 
-  document.getElementById("resumenProducto").innerHTML = `
+  /*document.getElementById("resumenProducto").innerHTML = `
     <div class="pedido-summary">
       🧾 Pedido de ${nombre}<br>
       ${resumen}<br>
       💰 Total: $${fmtCOP(total)}
-    </div>
+    </div>*/
   `;
 
   document.getElementById("metodosPago").style.display = "flex";
