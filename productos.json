@@ -15,7 +15,7 @@
   },
   {
     "id": "P003",
-    "nombre": "Lista Insumos Comidas Rapidas",
+    "nombre": "Combo Comidas Rapidas",
     "precio": 130000,
     "tallas": "N/A",
     "imagen": "img/lista-insumos.png"
@@ -29,10 +29,10 @@
   },
    {
     "id": "P005",
-    "nombre": "Alpargatas Ari Lila 2",
+    "nombre": "Combo Salsas Comidas Rapidas",
     "precio": 130000,
-    "tallas": "23 a 26",
-    "imagen": "img/alpargatas-ari-lila-2.jpeg"
+    "tallas": "N/A",
+    "imagen": "img/Combo-Salsas-Comidas-Rapidas.png"
   },
   {
     "id": "P006",
