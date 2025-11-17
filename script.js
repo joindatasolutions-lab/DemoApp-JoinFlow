@@ -4,8 +4,8 @@
 const fmtCOP = v => Number(v || 0).toLocaleString('es-CO');
 const state = { catalogo: [], cart: [] };
 
-// Constantes de integración
-const WHATSAPP_NUMERO = "573332571225"; 
+// Constantes
+const WHATSAPP_NUMERO = "573332571225";
 const WOMPI_BACKEND = "https://script.google.com/macros/s/AKfycbyugA-riUX-0YED15RpEAEKzPlAPhS6I9V_EnEhvrz32lqs8R5TJ02aAlfs7nlw_PB2/exec";
 
 /******************************
@@ -17,36 +17,46 @@ async function init() {
     state.catalogo = await res.json();
     renderCatalog();
   } catch (error) {
-    console.error("Error cargando catálogo:", error);
     Swal.fire("Error", "No se pudo cargar el catálogo", "error");
   }
+}
+
+/******************************
+ * BUSCADOR
+ ******************************/
+function filtrarCatalogo() {
+  const texto = document.getElementById("searchInput").value.toLowerCase();
+  const filtrados = state.catalogo.filter(p =>
+    p.nombre.toLowerCase().includes(texto)
+  );
+  pintarCatalogo(filtrados);
 }
 
 /******************************
  * RENDERIZAR CATÁLOGO
  ******************************/
 function renderCatalog() {
+  pintarCatalogo(state.catalogo);
+}
+
+function pintarCatalogo(lista) {
   const cont = document.getElementById("catalogo");
   cont.innerHTML = "";
 
-  state.catalogo.forEach(prod => {
-
-    // Procesamiento de tallas
+  lista.forEach(prod => {
     let tallas = [];
+
     if (typeof prod.tallas === "string") {
       const match = prod.tallas.match(/(\d+)\s*a\s*(\d+)/);
       if (match) {
-        const min = parseInt(match[1]);
-        const max = parseInt(match[2]);
-        for (let i = min; i <= max; i++) tallas.push(i);
+        for (let i = parseInt(match[1]); i <= parseInt(match[2]); i++) tallas.push(i);
       } else {
         tallas = [prod.tallas];
       }
-    } else if (Array.isArray(prod.tallas)) {
+    } else {
       tallas = prod.tallas;
     }
 
-    // Crear card
     const card = document.createElement("div");
     card.className = "card";
     card.innerHTML = `
@@ -54,13 +64,12 @@ function renderCatalog() {
       <div class="body">
         <div class="name">${prod.nombre}</div>
         <div class="price">$${fmtCOP(prod.precio)}</div>
-        <div style="margin-bottom:10px;">
-          <label style="font-size:0.85rem;color:#666;">Tamaño:</label>
-          <select id="Tamaño-${prod.id}" class="select-Tamaño">
-            <option value="">Selecciona</option>
-            ${tallas.map(t => `<option value="${t}">${t}</option>`).join("")}
-          </select>
-        </div>
+
+        <select id="Tamaño-${prod.id}">
+          <option value="">Selecciona</option>
+          ${tallas.map(t => `<option value="${t}">${t}</option>`).join("")}
+        </select>
+
         <button class="btn-add" onclick="addToCart('${prod.id}')">Agregar al carrito</button>
       </div>
     `;
@@ -79,13 +88,13 @@ function addToCart(id) {
   const tallaSeleccionada = select.value;
 
   if (!tallaSeleccionada) {
-    Swal.fire("Selecciona un tamaño", "Por favor elige un tamaño antes de agregar al carrito.", "warning");
+    Swal.fire("Selecciona un tamaño", "", "warning");
     return;
   }
 
-  const existing = state.cart.find(p => p.id === id && p.Tamaño === tallaSeleccionada);
-  if (existing) {
-    existing.qty += 1;
+  const existe = state.cart.find(p => p.id === id && p.Tamaño === tallaSeleccionada);
+  if (existe) {
+    existe.qty += 1;
   } else {
     state.cart.push({ ...prod, Tamaño: tallaSeleccionada, qty: 1 });
   }
@@ -97,7 +106,7 @@ function addToCart(id) {
     title: 'Producto agregado',
     text: `${prod.nombre} (Tamaño ${tallaSeleccionada}) añadido al carrito`,
     icon: 'success',
-    timer: 1500,
+    timer: 1200,
     showConfirmButton: false
   });
 }
@@ -111,24 +120,27 @@ document.getElementById("btnDrawer").onclick = () => {
 };
 document.getElementById("cerrarDrawer").onclick = () =>
   document.getElementById("drawerCarrito").classList.remove("open");
+
 document.getElementById("vaciarCarrito").onclick = () => {
   state.cart = [];
-  renderDrawerCart();
   updateCartCount();
+  renderDrawerCart();
 };
 
 function updateCartCount() {
-  const totalQty = state.cart.reduce((a, b) => a + b.qty, 0);
-  document.getElementById("cartCount").textContent = totalQty;
+  document.getElementById("cartCount").textContent =
+    state.cart.reduce((a, b) => a + b.qty, 0);
 }
 
-function changeQty(id, Tamaño, delta) {
-  const item = state.cart.find(p => p.id === id && p.Tamaño === Tamaño);
+function changeQty(id, tamaño, delta) {
+  const item = state.cart.find(p => p.id === id && p.Tamaño === tamaño);
   if (!item) return;
+
   item.qty += delta;
   if (item.qty <= 0) {
-    state.cart = state.cart.filter(p => !(p.id === id && p.Tamaño === Tamaño));
+    state.cart = state.cart.filter(p => !(p.id === id && p.Tamaño === tamaño));
   }
+
   updateCartCount();
   renderDrawerCart();
 }
@@ -136,36 +148,41 @@ function changeQty(id, Tamaño, delta) {
 function renderDrawerCart() {
   const cont = document.getElementById("cartItemsDrawer");
   cont.innerHTML = "";
-  let subtotal = 0;
 
   if (state.cart.length === 0) {
     cont.innerHTML = `<p style="text-align:center;color:#666;">Tu carrito está vacío 🛒</p>`;
-  } else {
-    state.cart.forEach(p => {
-      const sub = p.precio * p.qty;
-      subtotal += sub;
-      cont.innerHTML += `
-        <li class="cart-item">
-          <div>
-            <div class="name">${p.nombre}</div>
-            <div class="price">$${fmtCOP(p.precio)} c/u — Tamaño: ${p.Tamaño}</div>
-          </div>
-          <div class="qty">
-            <button onclick="changeQty('${p.id}','${p.Tamaño}', -1)">−</button>
-            <span>${p.qty}</span>
-            <button onclick="changeQty('${p.id}','${p.Tamaño}', 1)">+</button>
-          </div>
-        </li>`;
-    });
+    document.getElementById("subtotalDrawer").textContent = "0";
+    document.getElementById("totalDrawer").textContent = "0";
+    return;
   }
 
-  const total = subtotal;
+  let subtotal = 0;
+
+  state.cart.forEach(p => {
+    const sub = p.precio * p.qty;
+    subtotal += sub;
+
+    cont.innerHTML += `
+      <li class="cart-item">
+        <div>
+          <div class="name">${p.nombre}</div>
+          <div class="price">$${fmtCOP(p.precio)} c/u — Tamaño: ${p.Tamaño}</div>
+        </div>
+        <div class="qty">
+          <button onclick="changeQty('${p.id}','${p.Tamaño}', -1)">−</button>
+          <span>${p.qty}</span>
+          <button onclick="changeQty('${p.id}','${p.Tamaño}', 1)">+</button>
+        </div>
+      </li>
+    `;
+  });
+
   document.getElementById("subtotalDrawer").textContent = fmtCOP(subtotal);
-  document.getElementById("totalDrawer").textContent = fmtCOP(total);
+  document.getElementById("totalDrawer").textContent = fmtCOP(subtotal);
 }
 
 /******************************
- * NAVEGACIÓN ENTRE VISTAS
+ * FLUJO ENTRE VISTAS
  ******************************/
 function show(id) {
   document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
@@ -174,17 +191,19 @@ function show(id) {
 
 document.getElementById("btnContinuarPedido").onclick = () => {
   if (state.cart.length === 0) {
-    Swal.fire("Tu carrito está vacío", "Agrega productos antes de continuar.", "warning");
+    Swal.fire("Tu carrito está vacío", "", "warning");
     return;
   }
 
   const resumen = state.cart
     .map(p => `${p.qty}× ${p.nombre} (Tamaño ${p.Tamaño})`)
     .join(" | ");
+
   const subtotal = state.cart.reduce((a, b) => a + b.precio * b.qty, 0);
 
-  // ✅ MOSTRAR SOLO EL PRIMER RECUADRO (EL VERDE)
-  document.getElementById("resumenProducto").innerHTML = `
+  // ✅ SOLO UN RECUADRO VERDE
+  const div = document.getElementById("resumenProducto");
+  div.innerHTML = `
     <div class="pedido-summary">
       🛍 ${resumen} — Subtotal: $${fmtCOP(subtotal)}
     </div>
@@ -195,71 +214,50 @@ document.getElementById("btnContinuarPedido").onclick = () => {
 };
 
 /******************************
- * FORMULARIO DE PEDIDO
+ * CONFIRMAR DATOS (QUITAR 2° RECUADRO)
  ******************************/
-document.getElementById("btnVolver").onclick = () => show("viewCatalog");
-
 document.getElementById("btnConfirmarPedido").onclick = () => {
   const nombre = document.getElementById("nombreCliente").value.trim();
-  const telefono = document.getElementById("telefonoCliente").value.trim();
-  const direccion = document.getElementById("direccionCliente").value.trim();
-  const barrio = document.getElementById("barrioCliente").value.trim();
+  const tel = document.getElementById("telefonoCliente").value.trim();
+  const dir = document.getElementById("direccionCliente").value.trim();
+  const bar = document.getElementById("barrioCliente").value.trim();
 
-  if (!nombre || !telefono || !direccion || !barrio) {
-    Swal.fire("Campos incompletos", "Por favor completa todos los datos antes de continuar.", "warning");
+  if (!nombre || !tel || !dir || !bar) {
+    Swal.fire("Completa todos los campos", "", "warning");
     return;
   }
 
-  // ❌ ELIMINAR EL SEGUNDO RECUADRO POR COMPLETO
+  // ❌ BORRAR EL RESUMEN PARA QUE NO APAREZCA RECUADRO GRANDE
   document.getElementById("resumenProducto").innerHTML = "";
 
   // Mostrar métodos de pago
   document.getElementById("metodosPago").style.display = "flex";
   document.getElementById("btnConfirmarPedido").disabled = true;
 
-  Swal.fire("Datos confirmados", "Elige cómo deseas continuar con el pago.", "success");
+  Swal.fire("Datos confirmados", "Elige cómo pagar", "success");
 };
 
 /******************************
- * INTEGRACIONES
+ * WHATSAPP
  ******************************/
-function generarReferencia(idProducto) {
-  const timestamp = Date.now();
-  return `pedido_${timestamp}_${idProducto}`;
-}
-
-async function iniciarPagoWompi(idProducto, monto) {
-  const referencia = generarReferencia(idProducto);
-  try {
-    const response = await fetch(`${WOMPI_BACKEND}?reference=${referencia}&amount=${monto}`);
-    const wompiUrl = await response.text();
-    window.location.href = wompiUrl;
-  } catch (err) {
-    Swal.fire("Error", "No se pudo generar el enlace de pago.", "error");
-    console.error("Error Wompi:", err);
-  }
-}
-
-function enviarWhatsApp(mensaje) {
-  window.open(`https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(mensaje)}`, "_blank");
-}
-
 document.getElementById("btnConfirmarWhatsapp").onclick = () => {
   const nombre = document.getElementById("nombreCliente").value.trim();
-  const telefono = document.getElementById("telefonoCliente").value.trim();
-  const direccion = document.getElementById("direccionCliente").value.trim();
-  const barrio = document.getElementById("barrioCliente").value.trim();
+  const tel = document.getElementById("telefonoCliente").value.trim();
+  const dir = document.getElementById("direccionCliente").value.trim();
+  const bar = document.getElementById("barrioCliente").value.trim();
+
   const total = state.cart.reduce((a, b) => a + b.precio * b.qty, 0);
 
   const mensaje =
-    `🧾 *Pedido de ${nombre}*\n📞 ${telefono}\n📍 ${direccion}, ${barrio}\n\n` +
+    `🧾 *Pedido de ${nombre}*\n` +
+    `📞 ${tel}\n📍 ${dir}, ${bar}\n\n` +
     state.cart.map(p => `• ${p.qty}× ${p.nombre} (Tamaño ${p.Tamaño})`).join("\n") +
-    `\n\n💰 *Total:* $${fmtCOP(total)}\n\nGracias por tu compra 💐`;
+    `\n\n💰 Total: $${fmtCOP(total)}\nGracias por tu compra 😊`;
 
-  enviarWhatsApp(mensaje);
+  window.open(`https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(mensaje)}`);
 };
 
 /******************************
- * CARGA INICIAL
+ * INICIAR
  ******************************/
 init();
