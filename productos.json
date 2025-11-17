@@ -15,10 +15,10 @@
   },
   {
     "id": "P003",
-    "nombre": "Alpargatas Anjana 2",
+    "nombre": "lista-insumos",
     "precio": 130000,
-    "tallas": "23 a 32",
-    "imagen": "img/alpargatas-anjana-2.jpeg"
+    "tallas": "N/A",
+    "imagen": "img/lista-insumos.png"
   },
   {
     "id": "P004",
