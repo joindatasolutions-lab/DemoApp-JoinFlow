@@ -5,8 +5,8 @@ const fmtCOP = v => Number(v || 0).toLocaleString('es-CO');
 const state = { catalogo: [], cart: [] };
 
 // Constantes de integración
-const WHATSAPP_NUMERO = "573332571225"; // Número de WhatsApp
-const WOMPI_BACKEND = "https://script.google.com/macros/s/AKfycbyugA-riUX-0YED15RpEAEKzPlAPhS6I9V_EnEhvrz32lqs8R5TJ02aAlfs7nlw_PB2/exec"; // Apps Script para generar link firmado
+const WHATSAPP_NUMERO = "573332571225"; 
+const WOMPI_BACKEND = "https://script.google.com/macros/s/AKfycbyugA-riUX-0YED15RpEAEKzPlAPhS6I9V_EnEhvrz32lqs8R5TJ02aAlfs7nlw_PB2/exec";
 
 /******************************
  * INICIALIZACIÓN
@@ -30,7 +30,8 @@ function renderCatalog() {
   cont.innerHTML = "";
 
   state.catalogo.forEach(prod => {
-    // Convertir texto de tallas ("23 a 32") a lista de opciones
+
+    // Procesamiento de tallas
     let tallas = [];
     if (typeof prod.tallas === "string") {
       const match = prod.tallas.match(/(\d+)\s*a\s*(\d+)/);
@@ -45,6 +46,7 @@ function renderCatalog() {
       tallas = prod.tallas;
     }
 
+    // Crear card
     const card = document.createElement("div");
     card.className = "card";
     card.innerHTML = `
@@ -170,21 +172,61 @@ function show(id) {
   document.getElementById(id).classList.add("active");
 }
 
-// Botón CONTINUAR → va al formulario
 document.getElementById("btnContinuarPedido").onclick = () => {
   if (state.cart.length === 0) {
     Swal.fire("Tu carrito está vacío", "Agrega productos antes de continuar.", "warning");
     return;
   }
 
-  const resumen = state.cart.map(p => `${p.qty}× ${p.nombre} (Talla ${p.talla})`).join(" | ");
+  const resumen = state.cart
+    .map(p => `${p.qty}× ${p.nombre} (Talla ${p.talla})`)
+    .join(" | ");
   const subtotal = state.cart.reduce((a, b) => a + b.precio * b.qty, 0);
 
-  document.getElementById("resumenProducto").textContent =
-    `🛍 ${resumen} — Subtotal: $${fmtCOP(subtotal)}`;
+  document.getElementById("resumenProducto").innerHTML = `
+    <div class="pedido-summary">
+      🛍 ${resumen} — Subtotal: $${fmtCOP(subtotal)}
+    </div>
+  `;
 
   show("viewForm");
   document.getElementById("drawerCarrito").classList.remove("open");
+};
+
+/******************************
+ * FORMULARIO DE PEDIDO
+ ******************************/
+document.getElementById("btnVolver").onclick = () => show("viewCatalog");
+
+document.getElementById("btnConfirmarPedido").onclick = () => {
+  const nombre = document.getElementById("nombreCliente").value.trim();
+  const telefono = document.getElementById("telefonoCliente").value.trim();
+  const direccion = document.getElementById("direccionCliente").value.trim();
+  const barrio = document.getElementById("barrioCliente").value.trim();
+
+  if (!nombre || !telefono || !direccion || !barrio) {
+    Swal.fire("Campos incompletos", "Por favor completa todos los datos antes de continuar.", "warning");
+    return;
+  }
+
+  const total = state.cart.reduce((a, b) => a + b.precio * b.qty, 0);
+  
+  const resumen = state.cart
+    .map(p => `${p.qty}× ${p.nombre} (Talla ${p.talla})`)
+    .join("<br>");
+
+  document.getElementById("resumenProducto").innerHTML = `
+    <div class="pedido-summary">
+      🧾 Pedido de ${nombre}<br>
+      ${resumen}<br>
+      💰 Total: $${fmtCOP(total)}
+    </div>
+  `;
+
+  document.getElementById("metodosPago").style.display = "flex";
+  document.getElementById("btnConfirmarPedido").disabled = true;
+
+  Swal.fire("Datos confirmados", "Elige cómo deseas continuar con el pago.", "success");
 };
 
 /******************************
@@ -210,70 +252,6 @@ async function iniciarPagoWompi(idProducto, monto) {
 function enviarWhatsApp(mensaje) {
   window.open(`https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(mensaje)}`, "_blank");
 }
-
-/******************************
- * FORMULARIO DE PEDIDO
- ******************************/
-document.getElementById("btnVolver").onclick = () => show("viewCatalog");
-
-document.getElementById("btnConfirmarPedido").onclick = () => {
-  const nombre = document.getElementById("nombreCliente").value.trim();
-  const telefono = document.getElementById("telefonoCliente").value.trim();
-  const direccion = document.getElementById("direccionCliente").value.trim();
-  const barrio = document.getElementById("barrioCliente").value.trim();
-
-  if (!nombre || !telefono || !direccion || !barrio) {
-    Swal.fire("Campos incompletos", "Por favor completa todos los datos antes de continuar.", "warning");
-    return;
-  }
-
-  const total = state.cart.reduce((a, b) => a + b.precio * b.qty, 0);
-  const resumen = state.cart.map(p => `${p.qty}× ${p.nombre} (Talla ${p.talla})`).join("\n");
-  document.getElementById("resumenProducto").textContent =
-    `🧾 Pedido de ${nombre}\n${resumen}\n💰 Total: $${fmtCOP(total)}`;
-
-  document.getElementById("metodosPago").style.display = "flex";
-  document.getElementById("btnConfirmarPedido").disabled = true;
-  Swal.fire("Datos confirmados", "Elige cómo deseas continuar con el pago.", "success");
-};
-
-document.getElementById("btnPagarWompi").onclick = async () => {
-  const nombre = document.getElementById("nombreCliente").value.trim();
-  const telefono = document.getElementById("telefonoCliente").value.trim();
-  const direccion = document.getElementById("direccionCliente").value.trim();
-  const barrio = document.getElementById("barrioCliente").value.trim();
-
-  const total = state.cart.reduce((a, b) => a + b.precio * b.qty, 0);
-  const detallePedido = state.cart.map(p => `${p.qty}× ${p.nombre} (Talla ${p.talla})`).join(", ");
-
-  const reference = `pedido_${Date.now()}_${state.cart[0].id}`;
-
-  try {
-    // 1️⃣ Guardar el pedido en la hoja
-    await fetch(WOMPI_BACKEND + "?saveOrder=true", {
-      method: "POST",
-      body: JSON.stringify({
-        reference,
-        nombre,
-        telefono,
-        direccion,
-        barrio,
-        detallePedido,
-        total
-      })
-    });
-
-    // 2️⃣ Redirigir a Wompi
-    const response = await fetch(`${WOMPI_BACKEND}?reference=${reference}&amount=${total}`);
-    const wompiUrl = await response.text();
-    window.location.href = wompiUrl;
-
-  } catch (error) {
-    Swal.fire("Error", "No se pudo registrar el pedido o generar el pago.", "error");
-    console.error("Error:", error);
-  }
-};
-
 
 document.getElementById("btnConfirmarWhatsapp").onclick = () => {
   const nombre = document.getElementById("nombreCliente").value.trim();
