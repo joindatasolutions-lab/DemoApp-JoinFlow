@@ -14,7 +14,8 @@
 </head>
 
 <body>
-    <!-- === ENCABEZADO === -->
+
+  <!-- === ENCABEZADO === -->
   <header class="catalog-header">
     <div class="logo-area">
       <img src="img/flow-removebg-preview.png" alt="Join Flow Logo">
@@ -23,20 +24,23 @@
     <div class="title-search">
       <h2>Catálogo de Productos</h2>
 
-      <!-- 🔍 BUSCADOR UBICADO JUNTO AL TÍTULO -->
+      <!-- 🔍 BUSCADOR -->
       <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Buscar..." oninput="filtrarCatalogo()">
+        <input 
+          type="text" 
+          id="searchInput" 
+          placeholder="Buscar..." 
+          oninput="filtrarCatalogo()">
       </div>
     </div>
   </header>
-
 
   <!-- === CATÁLOGO === -->
   <section id="viewCatalog" class="view active">
     <div id="catalogo" class="catalogo"></div>
   </section>
 
-    <!-- === BOTÓN FLOTANTE (Carrito) === -->
+  <!-- === BOTÓN FLOTANTE (Carrito) === -->
   <button id="btnDrawer" class="cart-fab">🛍️ <span id="cartCount">0</span></button>
 
   <!-- === DRAWER DEL CARRITO === -->
@@ -45,8 +49,10 @@
       <strong>🛍️ Tu carrito</strong>
       <button id="cerrarDrawer" class="icon-btn">✕</button>
     </div>
+
     <div class="drawer-body">
       <ul id="cartItemsDrawer" class="cart-list"></ul>
+
       <div class="drawer-footer">
         <div class="subtotal">
           <p><strong>Subtotal:</strong> $<span id="subtotalDrawer">0</span></p>
@@ -60,14 +66,20 @@
     </div>
   </aside>
 
-
-
   <!-- === FORMULARIO DE PEDIDO === -->
   <section id="viewForm" class="view">
+
     <form id="pedidoForm">
+
+      <!-- ❌ RECUADRO ORIGINAL QUE CAUSABA DUPLICADO -->
+      <!--
       <div class="pedido-summary" id="resumenProducto">
-        🛍 Tu pedido
+          🛍 Tu pedido
       </div>
+      -->
+
+      <!-- ✅ NUEVO: SIN ESTILOS, VACÍO, LISTO PARA QUE JS INSERTE SOLO UNO -->
+      <div id="resumenProducto"></div>
 
       <h3>Datos del cliente</h3>
       <div class="grid">
@@ -75,6 +87,7 @@
           <label>Nombre completo</label>
           <input type="text" id="nombreCliente" placeholder="Escribe tu nombre completo" required>
         </div>
+
         <div>
           <label>Teléfono</label>
           <input type="tel" id="telefonoCliente" placeholder="Ej: 3001234567" required>
@@ -87,27 +100,27 @@
           <label>Dirección de entrega</label>
           <input type="text" id="direccionCliente" placeholder="Ej: Calle 123 #45-67" required>
         </div>
+
         <div>
           <label>Barrio</label>
           <input type="text" id="barrioCliente" placeholder="Ej: Miramar, Altos del Limón" required>
         </div>
       </div>
 
-      <!-- === BOTONES DE ACCIÓN === -->
       <div class="actions">
         <button type="button" id="btnVolver" class="btn-outline">Regresar</button>
         <button type="button" id="btnConfirmarPedido" class="btn-primary">Confirmar pedido</button>
       </div>
 
-      <!-- === BOTONES DE PAGO (ocultos hasta confirmar datos) === -->
       <div id="metodosPago" class="actions" style="display:none; margin-top:20px;">
         <button type="button" id="btnPagarWompi" class="btn-primary">💳 Pagar con Wompi</button>
         <button type="button" id="btnConfirmarWhatsapp" class="btn-outline">📱 Confirmar por WhatsApp</button>
       </div>
+
     </form>
+
   </section>
 
-  <!-- === SCRIPT PRINCIPAL === -->
   <script src="script.js"></script>
 </body>
 </html>

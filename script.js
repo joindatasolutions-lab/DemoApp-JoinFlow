@@ -25,10 +25,17 @@ async function init() {
  * BUSCADOR
  ******************************/
 function filtrarCatalogo() {
-  const texto = document.getElementById("searchInput").value.toLowerCase();
+  const texto = document.getElementById("searchInput").value.toLowerCase().trim();
+
+  if (texto === "") {
+    pintarCatalogo(state.catalogo);
+    return;
+  }
+
   const filtrados = state.catalogo.filter(p =>
     p.nombre.toLowerCase().includes(texto)
   );
+
   pintarCatalogo(filtrados);
 }
 
@@ -59,6 +66,7 @@ function pintarCatalogo(lista) {
 
     const card = document.createElement("div");
     card.className = "card";
+
     card.innerHTML = `
       <img src="${prod.imagen}" alt="${prod.nombre}">
       <div class="body">
@@ -73,6 +81,7 @@ function pintarCatalogo(lista) {
         <button class="btn-add" onclick="addToCart('${prod.id}')">Agregar al carrito</button>
       </div>
     `;
+
     cont.appendChild(card);
   });
 }
@@ -93,6 +102,7 @@ function addToCart(id) {
   }
 
   const existe = state.cart.find(p => p.id === id && p.Tamaño === tallaSeleccionada);
+
   if (existe) {
     existe.qty += 1;
   } else {
@@ -118,6 +128,7 @@ document.getElementById("btnDrawer").onclick = () => {
   renderDrawerCart();
   document.getElementById("drawerCarrito").classList.add("open");
 };
+
 document.getElementById("cerrarDrawer").onclick = () =>
   document.getElementById("drawerCarrito").classList.remove("open");
 
@@ -137,6 +148,7 @@ function changeQty(id, tamaño, delta) {
   if (!item) return;
 
   item.qty += delta;
+
   if (item.qty <= 0) {
     state.cart = state.cart.filter(p => !(p.id === id && p.Tamaño === tamaño));
   }
@@ -201,7 +213,6 @@ document.getElementById("btnContinuarPedido").onclick = () => {
 
   const subtotal = state.cart.reduce((a, b) => a + b.precio * b.qty, 0);
 
-  // ✅ SOLO UN RECUADRO VERDE
   const div = document.getElementById("resumenProducto");
   div.innerHTML = `
     <div class="pedido-summary">
@@ -227,10 +238,9 @@ document.getElementById("btnConfirmarPedido").onclick = () => {
     return;
   }
 
-  // ❌ BORRAR EL RESUMEN PARA QUE NO APAREZCA RECUADRO GRANDE
+  // ❌ elimina el resumen anterior para evitar recuadro doble
   document.getElementById("resumenProducto").innerHTML = "";
 
-  // Mostrar métodos de pago
   document.getElementById("metodosPago").style.display = "flex";
   document.getElementById("btnConfirmarPedido").disabled = true;
 
