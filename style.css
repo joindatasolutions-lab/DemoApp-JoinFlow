@@ -301,14 +301,15 @@ textarea {
   grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
 }
 .pedido-summary {
-  background:#fff3f6;
-  border:1px solid var(--borde);
-  border-radius:12px;
-  padding:10px 16px;
-  margin-bottom:16px;
-  font-weight:600;
-  color:#a34b6d;
+  background: #E6FAF3;          /* Verde súper suave */
+  border: 1px solid #00A884;     /* Verde corporativo */
+  border-radius: 12px;
+  padding: 10px 16px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  color: #006B58;                /* Verde oscuro para texto */
 }
+
 .actions {
   display:flex;
   justify-content:space-between;
