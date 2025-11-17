@@ -55,8 +55,8 @@ function renderCatalog() {
         <div class="name">${prod.nombre}</div>
         <div class="price">$${fmtCOP(prod.precio)}</div>
         <div style="margin-bottom:10px;">
-          <label style="font-size:0.85rem;color:#666;">Talla:</label>
-          <select id="talla-${prod.id}" class="select-talla">
+          <label style="font-size:0.85rem;color:#666;">Tamaño:</label>
+          <select id="Tamaño-${prod.id}" class="select-Tamaño">
             <option value="">Selecciona</option>
             ${tallas.map(t => `<option value="${t}">${t}</option>`).join("")}
           </select>
@@ -75,19 +75,19 @@ function addToCart(id) {
   const prod = state.catalogo.find(p => p.id === id);
   if (!prod) return;
 
-  const select = document.getElementById(`talla-${id}`);
+  const select = document.getElementById(`Tamaño-${id}`);
   const tallaSeleccionada = select.value;
 
   if (!tallaSeleccionada) {
-    Swal.fire("Selecciona una talla", "Por favor elige una talla antes de agregar al carrito.", "warning");
+    Swal.fire("Selecciona una Tamaño", "Por favor elige un Tamaño antes de agregar al carrito.", "warning");
     return;
   }
 
-  const existing = state.cart.find(p => p.id === id && p.talla === tallaSeleccionada);
+  const existing = state.cart.find(p => p.id === id && p.Tamaño === tallaSeleccionada);
   if (existing) {
     existing.qty += 1;
   } else {
-    state.cart.push({ ...prod, talla: tallaSeleccionada, qty: 1 });
+    state.cart.push({ ...prod, Tamaño: tallaSeleccionada, qty: 1 });
   }
 
   updateCartCount();
@@ -95,7 +95,7 @@ function addToCart(id) {
 
   Swal.fire({
     title: 'Producto agregado',
-    text: `${prod.nombre} (Talla ${tallaSeleccionada}) añadido al carrito`,
+    text: `${prod.nombre} (Tamaño ${tallaSeleccionada}) añadido al carrito`,
     icon: 'success',
     timer: 1500,
     showConfirmButton: false
@@ -122,12 +122,12 @@ function updateCartCount() {
   document.getElementById("cartCount").textContent = totalQty;
 }
 
-function changeQty(id, talla, delta) {
-  const item = state.cart.find(p => p.id === id && p.talla === talla);
+function changeQty(id, Tamaño, delta) {
+  const item = state.cart.find(p => p.id === id && p.Tamaño === Tamaño);
   if (!item) return;
   item.qty += delta;
   if (item.qty <= 0) {
-    state.cart = state.cart.filter(p => !(p.id === id && p.talla === talla));
+    state.cart = state.cart.filter(p => !(p.id === id && p.Tamaño === Tamaño));
   }
   updateCartCount();
   renderDrawerCart();
@@ -148,12 +148,12 @@ function renderDrawerCart() {
         <li class="cart-item">
           <div>
             <div class="name">${p.nombre}</div>
-            <div class="price">$${fmtCOP(p.precio)} c/u — Talla: ${p.talla}</div>
+            <div class="price">$${fmtCOP(p.precio)} c/u — Tamaño: ${p.Tamaño}</div>
           </div>
           <div class="qty">
-            <button onclick="changeQty('${p.id}','${p.talla}', -1)">−</button>
+            <button onclick="changeQty('${p.id}','${p.Tamaño}', -1)">−</button>
             <span>${p.qty}</span>
-            <button onclick="changeQty('${p.id}','${p.talla}', 1)">+</button>
+            <button onclick="changeQty('${p.id}','${p.Tamaño}', 1)">+</button>
           </div>
         </li>`;
     });
@@ -179,7 +179,7 @@ document.getElementById("btnContinuarPedido").onclick = () => {
   }
 
   const resumen = state.cart
-    .map(p => `${p.qty}× ${p.nombre} (Talla ${p.talla})`)
+    .map(p => `${p.qty}× ${p.nombre} (Tamaño ${p.Tamaño})`)
     .join(" | ");
   const subtotal = state.cart.reduce((a, b) => a + b.precio * b.qty, 0);
 
@@ -212,7 +212,7 @@ document.getElementById("btnConfirmarPedido").onclick = () => {
   const total = state.cart.reduce((a, b) => a + b.precio * b.qty, 0);
   
   const resumen = state.cart
-    .map(p => `${p.qty}× ${p.nombre} (Talla ${p.talla})`)
+    .map(p => `${p.qty}× ${p.nombre} (Tamaño ${p.Tamaño})`)
     .join("<br>");
 
   /*document.getElementById("resumenProducto").innerHTML = `
@@ -262,7 +262,7 @@ document.getElementById("btnConfirmarWhatsapp").onclick = () => {
 
   const mensaje =
     `🧾 *Pedido de ${nombre}*\n📞 ${telefono}\n📍 ${direccion}, ${barrio}\n\n` +
-    state.cart.map(p => `• ${p.qty}× ${p.nombre} (Talla ${p.talla})`).join("\n") +
+    state.cart.map(p => `• ${p.qty}× ${p.nombre} (Tamaño ${p.Tamaño})`).join("\n") +
     `\n\n💰 *Total:* $${fmtCOP(total)}\n\nGracias por tu compra 💐`;
 
   enviarWhatsApp(mensaje);
