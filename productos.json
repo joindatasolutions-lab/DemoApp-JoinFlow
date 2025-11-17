@@ -36,23 +36,23 @@
   },
   {
     "id": "P006",
-    "nombre": "Alpargatas Elisa",
-    "precio": 140000,
-    "tallas": "28 a 33",
-    "imagen": "img/alpargatas-elisa.jpeg"
+    "nombre": "Pizza Pollo Champiñones",
+    "precio": 40000,
+    "tallas": "S a XL",
+    "imagen": "img/pizza-pollo-y-champiñones.png"
   },
   {
     "id": "P007",
-    "nombre": "Alpargatas Luciana",
+    "nombre": "Armonia Primaveral",
     "precio": 130000,
-    "tallas": "25 a 33 (entrega en 15 días)",
-    "imagen": "img/alpargatas-luciana.jpeg"
+    "tallas": "N/A",
+    "imagen": "img/Armonia-Primaveral.png"
   },
   {
     "id": "P008",
-    "nombre": "Sandalias Stella",
-    "precio": 90000,
-    "tallas": "26 a 33",
-    "imagen": "img/sandalias-stella.jpeg"
+    "nombre": "Eterno Amor",
+    "precio": 130000,
+    "tallas": "N/A",
+    "imagen": "img/Eterno-Amor.png"
   }
 ]
