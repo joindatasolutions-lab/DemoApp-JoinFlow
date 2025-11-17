@@ -1,0 +1,65 @@
+[
+  {
+    "id": "P001",
+    "nombre": "Pizza-Dupla-Hawaiana-Pepperoni",
+    "precio": 40000,
+    "tallas": "L",
+    "imagen": "img/Pizza-Dupla-Hawaiana-Pepperoni.png"
+  },
+  {
+    "id": "P002",
+    "nombre": "Alpargatas Anjana 1",
+    "precio": 130000,
+    "tallas": "23 a 32",
+    "imagen": "img/alpargatas-anjana-1.jpeg"
+  },
+  {
+    "id": "P003",
+    "nombre": "Alpargatas Anjana 2",
+    "precio": 130000,
+    "tallas": "23 a 32",
+    "imagen": "img/alpargatas-anjana-2.jpeg"
+  },
+  {
+    "id": "P004",
+    "nombre": "Alpargatas Ari Lila 1",
+    "precio": 130000,
+    "tallas": "23 a 26",
+    "imagen": "img/alpargatas-ari-lila-1.jpeg"
+  },
+   {
+    "id": "P005",
+    "nombre": "Alpargatas Ari Lila 2",
+    "precio": 130000,
+    "tallas": "23 a 26",
+    "imagen": "img/alpargatas-ari-lila-2.jpeg"
+  },
+  {
+    "id": "P006",
+    "nombre": "Alpargatas Elisa",
+    "precio": 140000,
+    "tallas": "28 a 33",
+    "imagen": "img/alpargatas-elisa.jpeg"
+  },
+  {
+    "id": "P007",
+    "nombre": "Alpargatas Luciana",
+    "precio": 130000,
+    "tallas": "25 a 33 (entrega en 15 días)",
+    "imagen": "img/alpargatas-luciana.jpeg"
+  },
+  {
+    "id": "P008",
+    "nombre": "Sandalias Stella",
+    "precio": 90000,
+    "tallas": "26 a 33",
+    "imagen": "img/sandalias-stella.jpeg"
+  },
+  {
+    "id": "P009",
+    "nombre": "Cordones alpargatas",
+    "precio": 1500,
+    "tallas": "Colores surtidos",
+    "imagen": "img/cordones-alpargatas.jpeg"
+  }
+]

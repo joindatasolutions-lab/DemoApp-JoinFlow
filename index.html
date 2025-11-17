@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Flora - Catálogo de Arreglos Florales</title>
+
+  <!-- Fuentes y librerías -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <!-- === ENCABEZADO === -->
+  <header class="catalog-header">
+    <div class="logo-area">
+      <img src="img/flow-removebg-preview.png" alt="Join Flow Logo">
+    </div>
+
+    <div class="title-search">
+      <h2>Catálogo de Productos</h2>
+
+      <!-- 🔍 BUSCADOR UBICADO JUNTO AL TÍTULO -->
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Buscar..." oninput="filtrarCatalogo()">
+      </div>
+    </div>
+  </header>
+
+
+  <!-- === CATÁLOGO === -->
+  <section id="viewCatalog" class="view active">
+    <div id="catalogo" class="catalogo"></div>
+  </section>
+
+    <!-- === BOTÓN FLOTANTE (Carrito) === -->
+  <button id="btnDrawer" class="cart-fab">🛍️ <span id="cartCount">0</span></button>
+
+  <!-- === DRAWER DEL CARRITO === -->
+  <aside id="drawerCarrito" class="drawer">
+    <div class="drawer-header">
+      <strong>🛍️ Tu carrito</strong>
+      <button id="cerrarDrawer" class="icon-btn">✕</button>
+    </div>
+    <div class="drawer-body">
+      <ul id="cartItemsDrawer" class="cart-list"></ul>
+      <div class="drawer-footer">
+        <div class="subtotal">
+          <p><strong>Subtotal:</strong> $<span id="subtotalDrawer">0</span></p>
+          <h3><strong>Total:</strong> $<span id="totalDrawer">0</span></h3>
+        </div>
+        <div class="drawer-actions">
+          <button id="vaciarCarrito" class="btn-outline">Vaciar</button>
+          <button id="btnContinuarPedido" class="btn-primary">Continuar</button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+
+
+  <!-- === FORMULARIO DE PEDIDO === -->
+  <section id="viewForm" class="view">
+    <form id="pedidoForm">
+      <div class="pedido-summary" id="resumenProducto">
+        🛍 Tu pedido
+      </div>
+
+      <h3>Datos del cliente</h3>
+      <div class="grid">
+        <div>
+          <label>Nombre completo</label>
+          <input type="text" id="nombreCliente" placeholder="Escribe tu nombre completo" required>
+        </div>
+        <div>
+          <label>Teléfono</label>
+          <input type="tel" id="telefonoCliente" placeholder="Ej: 3001234567" required>
+        </div>
+      </div>
+
+      <h3>Entrega</h3>
+      <div class="grid">
+        <div>
+          <label>Dirección de entrega</label>
+          <input type="text" id="direccionCliente" placeholder="Ej: Calle 123 #45-67" required>
+        </div>
+        <div>
+          <label>Barrio</label>
+          <input type="text" id="barrioCliente" placeholder="Ej: Miramar, Altos del Limón" required>
+        </div>
+      </div>
+
+      <!-- === BOTONES DE ACCIÓN === -->
+      <div class="actions">
+        <button type="button" id="btnVolver" class="btn-outline">Regresar</button>
+        <button type="button" id="btnConfirmarPedido" class="btn-primary">Confirmar pedido</button>
+      </div>
+
+      <!-- === BOTONES DE PAGO (ocultos hasta confirmar datos) === -->
+      <div id="metodosPago" class="actions" style="display:none; margin-top:20px;">
+        <button type="button" id="btnPagarWompi" class="btn-primary">💳 Pagar con Wompi</button>
+        <button type="button" id="btnConfirmarWhatsapp" class="btn-outline">📱 Confirmar por WhatsApp</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- === SCRIPT PRINCIPAL === -->
+  <script src="script.js"></script>
+</body>
+</html>
