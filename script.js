@@ -79,7 +79,7 @@ function addToCart(id) {
   const tallaSeleccionada = select.value;
 
   if (!tallaSeleccionada) {
-    Swal.fire("Selecciona una Tamaño", "Por favor elige un Tamaño antes de agregar al carrito.", "warning");
+    Swal.fire("Selecciona un tamaño", "Por favor elige un tamaño antes de agregar al carrito.", "warning");
     return;
   }
 
@@ -183,6 +183,7 @@ document.getElementById("btnContinuarPedido").onclick = () => {
     .join(" | ");
   const subtotal = state.cart.reduce((a, b) => a + b.precio * b.qty, 0);
 
+  // ✅ MOSTRAR SOLO EL PRIMER RECUADRO (EL VERDE)
   document.getElementById("resumenProducto").innerHTML = `
     <div class="pedido-summary">
       🛍 ${resumen} — Subtotal: $${fmtCOP(subtotal)}
@@ -209,20 +210,10 @@ document.getElementById("btnConfirmarPedido").onclick = () => {
     return;
   }
 
-  const total = state.cart.reduce((a, b) => a + b.precio * b.qty, 0);
-  
-  const resumen = state.cart
-    .map(p => `${p.qty}× ${p.nombre} (Tamaño ${p.Tamaño})`)
-    .join("<br>");
+  // ❌ ELIMINAR EL SEGUNDO RECUADRO POR COMPLETO
+  document.getElementById("resumenProducto").innerHTML = "";
 
-  /*document.getElementById("resumenProducto").innerHTML = `
-    <div class="pedido-summary">
-      🧾 Pedido de ${nombre}<br>
-      ${resumen}<br>
-      💰 Total: $${fmtCOP(total)}
-    </div>
-  `;*/
-
+  // Mostrar métodos de pago
   document.getElementById("metodosPago").style.display = "flex";
   document.getElementById("btnConfirmarPedido").disabled = true;
 
