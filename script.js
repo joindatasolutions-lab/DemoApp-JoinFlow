@@ -53,15 +53,27 @@ function pintarCatalogo(lista) {
   lista.forEach(prod => {
     let tallas = [];
 
-    if (typeof prod.tallas === "string") {
+    // 🟩 CASO 1: Producto con tallas "S a XL" → generar S, M, L, XL
+    if (typeof prod.tallas === "string" && prod.tallas.toLowerCase().includes("s a xl")) {
+      tallas = ["S", "M", "L", "XL"];
+    }
+
+    // 🟦 CASO 2: Producto con tallas tipo rango numérico "1 a 5"
+    else if (typeof prod.tallas === "string") {
       const match = prod.tallas.match(/(\d+)\s*a\s*(\d+)/);
       if (match) {
-        for (let i = parseInt(match[1]); i <= parseInt(match[2]); i++) tallas.push(i);
+        for (let i = parseInt(match[1]); i <= parseInt(match[2]); i++) {
+          tallas.push(i);
+        }
       } else {
-        tallas = [prod.tallas];
+        // 🟧 CASO 3: tallas = "N/A"
+        tallas = ["N/A"];
       }
-    } else {
-      tallas = prod.tallas;
+    }
+
+    // 🟨 CASO 4: tallas como array
+    else {
+      tallas = prod.tallas || ["N/A"];
     }
 
     const card = document.createElement("div");
@@ -74,7 +86,6 @@ function pintarCatalogo(lista) {
         <div class="price">$${fmtCOP(prod.precio)}</div>
 
         <select id="Tamaño-${prod.id}">
-          <option value="">Selecciona</option>
           ${tallas.map(t => `<option value="${t}">${t}</option>`).join("")}
         </select>
 
@@ -85,6 +96,7 @@ function pintarCatalogo(lista) {
     cont.appendChild(card);
   });
 }
+
 
 /******************************
  * AGREGAR AL CARRITO
