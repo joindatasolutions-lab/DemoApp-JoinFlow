@@ -236,6 +236,11 @@ document.getElementById("btnContinuarPedido").onclick = () => {
   document.getElementById("drawerCarrito").classList.remove("open");
 };
 
+// 🔙 BOTÓN REGRESAR DESDE EL FORMULARIO
+document.getElementById("btnVolver").onclick = () => {
+    show("viewCatalog");
+};
+
 /******************************
  * CONFIRMAR DATOS (QUITAR 2° RECUADRO)
  ******************************/
