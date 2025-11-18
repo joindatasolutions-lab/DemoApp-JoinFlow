@@ -1,14 +1,14 @@
 /* ===========================
-   PALETA JOIN DATA
+   PALETA JOIN DATA - Join Flow
    =========================== */
 :root {
   --azul: #0077b6;
   --azul-oscuro: #003049;
   --verde: #00a884;
-  --bg: #f5f8fa;
+  --bg: #f0f4f8;
   --borde: #d9d9d9;
-  --gris-texto: #444;
-  --gris-suave: #f1f3f5;
+  --gris-texto: #334;
+  --gris-suave: #f8f9fa;
 }
 
 /* ===========================
@@ -16,44 +16,104 @@
    =========================== */
 body {
   margin: 0;
-  padding: 20px;
+  padding: 0;
   font-family: "Inter", sans-serif;
   background: var(--bg);
   color: var(--gris-texto);
 }
 
-h1 {
-  color: var(--azul-oscuro);
-  text-align: center;
-  margin-bottom: 30px;
+/* ===========================
+   TOP BAR
+   =========================== */
+.topbar {
+  background: #ffffff;
+  border-bottom: 1px solid var(--borde);
+  padding: 12px 24px;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-h2 {
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.logo {
+  height: 48px;
+}
+
+.topbar h1 {
+  font-size: 1.4rem;
+  color: var(--azul-oscuro);
+  margin: 0;
+  font-weight: 700;
+}
+
+.topbar-right .tag {
+  background: var(--azul);
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+/* ===========================
+   LAYOUT
+   =========================== */
+.container {
+  display: flex;
+  gap: 30px;
+  padding: 30px;
+}
+
+/* ====== SIDEBAR ====== */
+.sidebar {
+  width: 340px;
+  flex-shrink: 0;
+}
+
+.form-box {
+  background: #ffffff;
+  padding: 25px 28px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  border: 1px solid var(--borde);
+}
+
+.form-box h2 {
   color: var(--azul);
+  margin-bottom: 12px;
+}
+
+/* ====== CONTENT ====== */
+.content {
+  flex: 1;
+}
+
+.titulo-seccion {
+  color: var(--azul-oscuro);
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+  font-weight: 700;
 }
 
 /* ===========================
    FORMULARIO
    =========================== */
-.form-box {
-  background: #ffffff;
-  padding: 25px 30px;
-  border: 1px solid var(--borde);
-  border-radius: 16px;
-  max-width: 600px;
-  margin: 0 auto 40px auto;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
-
 label {
   font-weight: 600;
   display: block;
   margin-top: 12px;
   margin-bottom: 4px;
-  color: var(--gris-texto);
 }
 
-input, select {
+input {
   width: 100%;
   padding: 10px 12px;
   border-radius: 10px;
@@ -63,7 +123,7 @@ input, select {
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-input:focus, select:focus {
+input:focus {
   border-color: var(--azul);
   box-shadow: 0 0 0 3px rgba(0,119,182,0.15);
   outline: none;
@@ -88,19 +148,16 @@ input:focus, select:focus {
 }
 
 /* ===========================
-   GRID DE PRODUCTOS
+   GRID - PRODUCTOS
    =========================== */
 .grid {
-  margin-top: 20px;
+  margin-top: 10px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 20px;
+  gap: 24px;
   padding-bottom: 40px;
 }
 
-/* ===========================
-   TARJETA PRODUCTO
-   =========================== */
 .card {
   background: #ffffff;
   border: 1px solid var(--borde);
@@ -135,7 +192,7 @@ input:focus, select:focus {
 }
 
 /* ===========================
-   BOTONES DE ACCIÓN
+   BOTONES TARJETA
    =========================== */
 .btn-edit,
 .btn-delete {
@@ -149,22 +206,18 @@ input:focus, select:focus {
   transition: background 0.25s, color 0.25s;
 }
 
-/* EDITAR */
 .btn-edit {
   background: var(--azul);
   color: #fff;
-  border: none;
 }
 
 .btn-edit:hover {
   background: var(--azul-oscuro);
 }
 
-/* ELIMINAR */
 .btn-delete {
   background: #ff4d4d;
   color: #fff;
-  border: none;
 }
 
 .btn-delete:hover {
@@ -174,12 +227,12 @@ input:focus, select:focus {
 /* ===========================
    RESPONSIVE
    =========================== */
-@media (max-width: 700px) {
-  .form-box {
-    padding: 20px;
+@media (max-width: 900px) {
+  .container {
+    flex-direction: column;
   }
 
-  .card img {
-    height: 160px;
+  .sidebar {
+    width: 100%;
   }
 }
