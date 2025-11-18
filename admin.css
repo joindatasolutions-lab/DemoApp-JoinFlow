@@ -1,0 +1,185 @@
+/* ===========================
+   PALETA JOIN DATA
+   =========================== */
+:root {
+  --azul: #0077b6;
+  --azul-oscuro: #003049;
+  --verde: #00a884;
+  --bg: #f5f8fa;
+  --borde: #d9d9d9;
+  --gris-texto: #444;
+  --gris-suave: #f1f3f5;
+}
+
+/* ===========================
+   GLOBAL
+   =========================== */
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: "Inter", sans-serif;
+  background: var(--bg);
+  color: var(--gris-texto);
+}
+
+h1 {
+  color: var(--azul-oscuro);
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+h2 {
+  color: var(--azul);
+}
+
+/* ===========================
+   FORMULARIO
+   =========================== */
+.form-box {
+  background: #ffffff;
+  padding: 25px 30px;
+  border: 1px solid var(--borde);
+  border-radius: 16px;
+  max-width: 600px;
+  margin: 0 auto 40px auto;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+label {
+  font-weight: 600;
+  display: block;
+  margin-top: 12px;
+  margin-bottom: 4px;
+  color: var(--gris-texto);
+}
+
+input, select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--borde);
+  font-size: 0.95rem;
+  background: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input:focus, select:focus {
+  border-color: var(--azul);
+  box-shadow: 0 0 0 3px rgba(0,119,182,0.15);
+  outline: none;
+}
+
+.btn-primary {
+  background: var(--azul);
+  border: none;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 12px;
+  margin-top: 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 100%;
+  font-weight: 700;
+  transition: background 0.25s;
+}
+
+.btn-primary:hover {
+  background: var(--azul-oscuro);
+}
+
+/* ===========================
+   GRID DE PRODUCTOS
+   =========================== */
+.grid {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  padding-bottom: 40px;
+}
+
+/* ===========================
+   TARJETA PRODUCTO
+   =========================== */
+.card {
+  background: #ffffff;
+  border: 1px solid var(--borde);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.07);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+}
+
+.card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  background: var(--gris-suave);
+}
+
+.card h3 {
+  margin: 12px;
+  font-size: 1.05rem;
+  color: var(--azul-oscuro);
+  font-weight: 700;
+}
+
+.card p {
+  margin: 4px 12px;
+  font-size: 0.9rem;
+}
+
+/* ===========================
+   BOTONES DE ACCIÓN
+   =========================== */
+.btn-edit,
+.btn-delete {
+  display: inline-block;
+  margin: 10px 12px 14px 12px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  font-weight: 700;
+  transition: background 0.25s, color 0.25s;
+}
+
+/* EDITAR */
+.btn-edit {
+  background: var(--azul);
+  color: #fff;
+  border: none;
+}
+
+.btn-edit:hover {
+  background: var(--azul-oscuro);
+}
+
+/* ELIMINAR */
+.btn-delete {
+  background: #ff4d4d;
+  color: #fff;
+  border: none;
+}
+
+.btn-delete:hover {
+  background: #d90429;
+}
+
+/* ===========================
+   RESPONSIVE
+   =========================== */
+@media (max-width: 700px) {
+  .form-box {
+    padding: 20px;
+  }
+
+  .card img {
+    height: 160px;
+  }
+}
