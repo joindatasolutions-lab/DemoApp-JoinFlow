@@ -2,39 +2,60 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Panel Admin - JoinData Store</title>
+<title>Admin – Join Flow</title>
 <link rel="stylesheet" href="admin.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
 
-<h1>Panel Administrador – Catálogo</h1>
+<!-- ====== BARRA SUPERIOR ====== -->
+<header class="topbar">
+  <div class="topbar-left">
+    <img src="img/flow-removebg-preview.png" class="logo" alt="Join Flow Logo">
+    <h1>Panel Administrador</h1>
+  </div>
+  <div class="topbar-right">
+    <span class="tag">Catálogo</span>
+  </div>
+</header>
 
-<div class="form-box">
-  <h2>Agregar / Editar Producto</h2>
+<!-- ====== CONTENEDOR PRINCIPAL ====== -->
+<div class="container">
 
-  <label>ID</label>
-  <input type="text" id="id">
+  <!-- ====== FORMULARIO ====== -->
+  <div class="sidebar">
+    <div class="form-box">
+      <h2>Agregar / Editar Producto</h2>
 
-  <label>Nombre</label>
-  <input type="text" id="nombre">
+      <label>ID</label>
+      <input type="text" id="id" placeholder="Ej: P009">
 
-  <label>Precio</label>
-  <input type="number" id="precio">
+      <label>Nombre</label>
+      <input type="text" id="nombre" placeholder="Nombre del producto">
 
-  <label>Tallas (ej: "S a XL" o "N/A")</label>
-  <input type="text" id="tallas">
+      <label>Precio</label>
+      <input type="number" id="precio" placeholder="Ej: 35000">
 
-  <label>URL Imagen (img/...)</label>
-  <input type="text" id="imagen">
+      <label>Tallas (ej: &quot;S a XL&quot; o &quot;N/A&quot;)</label>
+      <input type="text" id="tallas" placeholder="Ej: S a XL">
 
-  <button onclick="guardarProducto()" class="btn-primary">Guardar</button>
+      <label>URL Imagen (img/...)</label>
+      <input type="text" id="imagen" placeholder="img/archivo.png">
+
+      <button onclick="guardarProducto()" class="btn-primary">Guardar</button>
+    </div>
+  </div>
+
+  <!-- ====== LISTA DE PRODUCTOS ====== -->
+  <div class="content">
+    <h2 class="titulo-seccion">Catálogo actual</h2>
+    <div id="listaProductos" class="grid"></div>
+  </div>
+
 </div>
-
-<h2 style="margin-top:40px;">Catálogo actual</h2>
-<div id="listaProductos" class="grid"></div>
 
 <script src="admin.js"></script>
 </body>
 </html>
+
