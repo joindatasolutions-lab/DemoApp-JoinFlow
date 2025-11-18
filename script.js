@@ -53,12 +53,12 @@ function pintarCatalogo(lista) {
   lista.forEach(prod => {
     let tallas = [];
 
-    // 🟩 CASO 1: Producto con tallas "S a XL" → generar S, M, L, XL
+    // 🍕 Caso pizzas → “S a XL”
     if (typeof prod.tallas === "string" && prod.tallas.toLowerCase().includes("s a xl")) {
       tallas = ["S", "M", "L", "XL"];
     }
 
-    // 🟦 CASO 2: Producto con tallas tipo rango numérico "1 a 5"
+    // Rango numérico tipo "1 a 5"
     else if (typeof prod.tallas === "string") {
       const match = prod.tallas.match(/(\d+)\s*a\s*(\d+)/);
       if (match) {
@@ -66,12 +66,12 @@ function pintarCatalogo(lista) {
           tallas.push(i);
         }
       } else {
-        // 🟧 CASO 3: tallas = "N/A"
+        // N/A u otro texto → mostrar N/A
         tallas = ["N/A"];
       }
     }
 
-    // 🟨 CASO 4: tallas como array
+    // Array de tallas
     else {
       tallas = prod.tallas || ["N/A"];
     }
@@ -97,7 +97,6 @@ function pintarCatalogo(lista) {
   });
 }
 
-
 /******************************
  * AGREGAR AL CARRITO
  ******************************/
@@ -108,17 +107,23 @@ function addToCart(id) {
   const select = document.getElementById(`Tamaño-${id}`);
   const tallaSeleccionada = select.value;
 
+  // Si es N/A no se exige talla
+  let tallaFinal = tallaSeleccionada;
+  if (tallaSeleccionada === "N/A") {
+    tallaFinal = "N/A";
+  }
+
   if (!tallaSeleccionada) {
     Swal.fire("Selecciona un tamaño", "", "warning");
     return;
   }
 
-  const existe = state.cart.find(p => p.id === id && p.Tamaño === tallaSeleccionada);
+  const existe = state.cart.find(p => p.id === id && p.Tamaño === tallaFinal);
 
   if (existe) {
     existe.qty += 1;
   } else {
-    state.cart.push({ ...prod, Tamaño: tallaSeleccionada, qty: 1 });
+    state.cart.push({ ...prod, Tamaño: tallaFinal, qty: 1 });
   }
 
   updateCartCount();
@@ -126,7 +131,7 @@ function addToCart(id) {
 
   Swal.fire({
     title: 'Producto agregado',
-    text: `${prod.nombre} (Tamaño ${tallaSeleccionada}) añadido al carrito`,
+    text: `${prod.nombre} (Tamaño ${tallaFinal}) añadido al carrito`,
     icon: 'success',
     timer: 1200,
     showConfirmButton: false
@@ -213,6 +218,14 @@ function show(id) {
   document.getElementById(id).classList.add("active");
 }
 
+// 🔙 BOTÓN REGRESAR
+document.getElementById("btnVolver").onclick = () => {
+  show("viewCatalog");
+};
+
+/******************************
+ * CONTINUAR PEDIDO
+ ******************************/
 document.getElementById("btnContinuarPedido").onclick = () => {
   if (state.cart.length === 0) {
     Swal.fire("Tu carrito está vacío", "", "warning");
@@ -236,13 +249,8 @@ document.getElementById("btnContinuarPedido").onclick = () => {
   document.getElementById("drawerCarrito").classList.remove("open");
 };
 
-// 🔙 BOTÓN REGRESAR DESDE EL FORMULARIO
-document.getElementById("btnVolver").onclick = () => {
-    show("viewCatalog");
-};
-
 /******************************
- * CONFIRMAR DATOS (QUITAR 2° RECUADRO)
+ * CONFIRMAR DATOS
  ******************************/
 document.getElementById("btnConfirmarPedido").onclick = () => {
   const nombre = document.getElementById("nombreCliente").value.trim();
@@ -255,7 +263,7 @@ document.getElementById("btnConfirmarPedido").onclick = () => {
     return;
   }
 
-  // ❌ elimina el resumen anterior para evitar recuadro doble
+  // Evita recuadro duplicado
   document.getElementById("resumenProducto").innerHTML = "";
 
   document.getElementById("metodosPago").style.display = "flex";
