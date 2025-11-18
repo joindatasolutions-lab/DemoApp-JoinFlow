@@ -5,10 +5,10 @@
   --azul: #0077b6;
   --azul-oscuro: #003049;
   --verde: #00a884;
-  --bg: #f0f4f8;
+  --bg: #eef3f7;
   --borde: #d9d9d9;
-  --gris-texto: #334;
-  --gris-suave: #f8f9fa;
+  --gris-texto: #2e3a45;
+  --white: #ffffff;
 }
 
 /* ===========================
@@ -26,15 +26,15 @@ body {
    TOP BAR
    =========================== */
 .topbar {
-  background: #ffffff;
-  border-bottom: 1px solid var(--borde);
-  padding: 12px 24px;
+  background: var(--white);
+  border-bottom: 1px solid #ccc;
+  padding: 12px 30px;
   position: sticky;
   top: 0;
-  z-index: 20;
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
+  z-index: 50;
 }
 
 .topbar-left {
@@ -44,68 +44,63 @@ body {
 }
 
 .logo {
-  height: 48px;
+  height: 45px;
 }
 
 .topbar h1 {
-  font-size: 1.4rem;
-  color: var(--azul-oscuro);
+  font-size: 1.45rem;
   margin: 0;
   font-weight: 700;
+  color: var(--azul-oscuro);
 }
 
-.topbar-right .tag {
+.tag {
   background: var(--azul);
-  color: #fff;
   padding: 6px 14px;
-  border-radius: 50px;
+  border-radius: 20px;
+  color: #fff;
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
 }
 
 /* ===========================
-   LAYOUT
+   CONTENEDOR PRINCIPAL
    =========================== */
 .container {
   display: flex;
-  gap: 30px;
   padding: 30px;
+  gap: 40px;
+  max-width: 1600px;
+  margin: auto;
 }
 
-/* ====== SIDEBAR ====== */
+/* ===========================
+   SIDEBAR (FORMULARIO)
+   =========================== */
 .sidebar {
-  width: 340px;
+  width: 350px;
   flex-shrink: 0;
+  position: sticky;
+  top: 100px;
 }
 
 .form-box {
-  background: #ffffff;
-  padding: 25px 28px;
+  background: var(--white);
+  padding: 26px 28px;
   border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   border: 1px solid var(--borde);
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.08);
 }
 
 .form-box h2 {
   color: var(--azul);
-  margin-bottom: 12px;
-}
-
-/* ====== CONTENT ====== */
-.content {
-  flex: 1;
-}
-
-.titulo-seccion {
-  color: var(--azul-oscuro);
-  margin-bottom: 15px;
-  font-size: 1.3rem;
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 1.2rem;
   font-weight: 700;
 }
 
-/* ===========================
-   FORMULARIO
-   =========================== */
+/* Inputs */
 label {
   font-weight: 600;
   display: block;
@@ -115,12 +110,11 @@ label {
 
 input {
   width: 100%;
-  padding: 10px 12px;
+  padding: 11px 13px;
   border-radius: 10px;
   border: 1px solid var(--borde);
-  font-size: 0.95rem;
   background: #fff;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: all 0.2s;
 }
 
 input:focus {
@@ -129,13 +123,14 @@ input:focus {
   outline: none;
 }
 
+/* Botón guardar */
 .btn-primary {
   background: var(--azul);
   border: none;
   color: white;
   padding: 12px 18px;
   border-radius: 12px;
-  margin-top: 20px;
+  margin-top: 22px;
   font-size: 1rem;
   cursor: pointer;
   width: 100%;
@@ -148,62 +143,71 @@ input:focus {
 }
 
 /* ===========================
-   GRID - PRODUCTOS
+   PANEL DERECHO (CATÁLOGO)
    =========================== */
-.grid {
-  margin-top: 10px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 24px;
-  padding-bottom: 40px;
+.content {
+  flex: 1;
 }
 
+.titulo-seccion {
+  color: var(--azul-oscuro);
+  margin-bottom: 14px;
+  margin-top: 5px;
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 22px;
+  padding: 10px 5px 40px;
+}
+
+/* PRODUCT CARD */
 .card {
-  background: #ffffff;
+  background: var(--white);
   border: 1px solid var(--borde);
   border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.07);
-  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.06);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  transform: translateY(-6px);
+  box-shadow: 0px 12px 22px rgba(0,0,0,0.10);
 }
 
 .card img {
   width: 100%;
   height: 200px;
   object-fit: cover;
-  background: var(--gris-suave);
+  background: #f0f0f0;
 }
 
 .card h3 {
-  margin: 12px;
-  font-size: 1.05rem;
-  color: var(--azul-oscuro);
+  margin: 10px 14px 6px;
+  font-size: 1rem;
   font-weight: 700;
+  color: var(--azul-oscuro);
 }
 
 .card p {
-  margin: 4px 12px;
+  margin: 4px 14px;
   font-size: 0.9rem;
 }
 
-/* ===========================
-   BOTONES TARJETA
-   =========================== */
-.btn-edit,
-.btn-delete {
+/* ACTION BUTTONS */
+.btn-edit, .btn-delete {
   display: inline-block;
-  margin: 10px 12px 14px 12px;
   padding: 8px 14px;
   border-radius: 10px;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   cursor: pointer;
   font-weight: 700;
-  transition: background 0.25s, color 0.25s;
+  margin: 10px 12px 14px;
 }
 
 .btn-edit {
@@ -216,23 +220,24 @@ input:focus {
 }
 
 .btn-delete {
-  background: #ff4d4d;
+  background: #e63946;
   color: #fff;
 }
 
 .btn-delete:hover {
-  background: #d90429;
+  background: #c1121f;
 }
 
 /* ===========================
    RESPONSIVE
    =========================== */
-@media (max-width: 900px) {
+@media (max-width: 992px) {
   .container {
     flex-direction: column;
   }
 
   .sidebar {
     width: 100%;
+    position: static;
   }
 }
