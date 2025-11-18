@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Login – Join Flow Admin</title>
+<link rel="stylesheet" href="login.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+
+<div class="login-container">
+
+  <div class="login-box">
+    <img src="img/flow-removebg-preview.png" class="login-logo">
+
+    <h2>Acceso administrador</h2>
+    <p class="sub">Ingresa tu clave para continuar</p>
+
+    <input type="password" id="clave" placeholder="Contraseña">
+
+    <button class="btn-login" onclick="login()">Ingresar</button>
+
+    <p class="note">© Join Data Solutions</p>
+  </div>
+
+</div>
+
+<script>
+  const ADMIN_KEY = "Join2024"; // 🔑 Cambia esta clave
+
+  function login() {
+    const clave = document.getElementById("clave").value.trim();
+
+    if (clave === ADMIN_KEY) {
+      localStorage.setItem("admin_auth", "true");
+      window.location.href = "admin.html";
+    } else {
+      Swal.fire("Error", "Contraseña incorrecta", "error");
+    }
+  }
+</script>
+
+</body>
+</html>
