@@ -3,43 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <title>Admin – Join Flow</title>
-
-<!-- Protege acceso -->
-<script>
-  if (localStorage.getItem("admin_auth") !== "true") {
-    window.location.href = "login.html";
-  }
-</script>
-
 <link rel="stylesheet" href="admin.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
 
-<!-- ========================== -->
-<!--    TOP BAR CORPORATIVA     -->
-<!-- ========================== -->
 <header class="topbar">
   <div class="topbar-left">
     <img src="img/flow-removebg-preview.png" class="logo" alt="Join Flow Logo">
     <h1>Panel Administrador</h1>
   </div>
-
   <div class="topbar-right">
-    <button class="logout-btn" onclick="logout()">Cerrar sesión</button>
+    <span class="tag">Catálogo</span>
   </div>
 </header>
 
-<!-- ========================== -->
-<!--    CONTENEDOR PRINCIPAL    -->
-<!-- ========================== -->
 <div class="container">
 
-  <!-- ======= SIDEBAR (FORM) ======= -->
   <div class="sidebar">
     <div class="form-box">
-      <h2>Agregar / Editar Producto</h2>
+      <h2 id="formTitle">Agregar / Editar Producto</h2> 
 
       <label>ID</label>
       <input type="text" id="id" placeholder="Ej: P009">
@@ -50,17 +34,18 @@
       <label>Precio</label>
       <input type="number" id="precio" placeholder="Ej: 35000">
 
-      <label>Tallas (ej: &quot;S a XL&quot; o &quot;N/A&quot;)</label>
+      <label>Tallas (ej: "S a XL" o "N/A")</label>
       <input type="text" id="tallas" placeholder="Ej: S a XL">
 
       <label>URL Imagen (img/...)</label>
       <input type="text" id="imagen" placeholder="img/archivo.png">
 
       <button onclick="guardarProducto()" class="btn-primary">Guardar</button>
+      
+      <button onclick="limpiarFormulario()" class="btn-secondary">Limpiar Formulario</button>
     </div>
   </div>
 
-  <!-- ======= CATÁLOGO ======= -->
   <div class="content">
     <h2 class="titulo-seccion">Catálogo actual</h2>
     <div id="listaProductos" class="grid"></div>

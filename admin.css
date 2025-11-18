@@ -1,15 +1,14 @@
 /* ===========================
-   PALETA CORPORATIVA JOIN FLOW
+   PALETA JOIN DATA - Join Flow
    =========================== */
 :root {
   --azul: #0077b6;
   --azul-oscuro: #003049;
   --verde: #00a884;
-  --bg: #f3f6fa;
-  --bg-card: #ffffff;
-  --borde: #d6dbe1;
-  --texto: #1e293b;
-  --texto-suave: #475569;
+  --bg: #eef3f7;
+  --borde: #d9d9d9;
+  --gris-texto: #2e3a45;
+  --white: #ffffff;
 }
 
 /* ===========================
@@ -20,214 +19,240 @@ body {
   padding: 0;
   font-family: "Inter", sans-serif;
   background: var(--bg);
-  color: var(--texto);
+  color: var(--gris-texto);
 }
 
 /* ===========================
-   TOPBAR
+   TOP BAR
    =========================== */
 .topbar {
-  background: var(--bg-card);
-  padding: 20px 35px;
-  border-bottom: 1px solid var(--borde);
+  background: var(--white);
+  border-bottom: 1px solid #ccc;
+  padding: 12px 30px;
+  position: sticky;
+  top: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  z-index: 50;
 }
 
 .topbar-left {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
 }
 
 .logo {
-  height: 80px;
-  width: auto;
-  object-fit: contain;
-  filter: drop-shadow(0px 1px 2px rgba(0,0,0,0.2));
+  height: 45px;
 }
 
 .topbar h1 {
-  font-size: 1.8rem;
+  font-size: 1.45rem;
   margin: 0;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--azul-oscuro);
 }
 
-/* LOGOUT */
-.logout-btn {
-  background: #d90429;
+.tag {
+  background: var(--azul);
+  padding: 6px 14px;
+  border-radius: 20px;
   color: #fff;
-  padding: 10px 20px;
-  border-radius: 12px;
-  border: none;
   font-weight: 700;
-  cursor: pointer;
-  transition: 0.25s;
-}
-
-.logout-btn:hover {
-  background: #9b001a;
+  font-size: 0.8rem;
 }
 
 /* ===========================
    CONTENEDOR PRINCIPAL
    =========================== */
 .container {
-  max-width: 1400px;
-  margin: 40px auto;
-  padding: 0 40px;
-  display: grid;
-  grid-template-columns: 360px 1fr;
-  gap: 45px;
+  display: flex;
+  padding: 30px;
+  gap: 40px;
+  max-width: 1600px;
+  margin: auto;
 }
 
 /* ===========================
-   SIDEBAR
+   SIDEBAR (FORMULARIO)
    =========================== */
-.form-box {
-  background: var(--bg-card);
-  padding: 32px;
-  border-radius: 20px;
-  border: 1px solid var(--borde);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+.sidebar {
+  width: 350px;
+  flex-shrink: 0;
   position: sticky;
-  top: 40px;
+  top: 100px;
+}
+
+.form-box {
+  background: var(--white);
+  padding: 26px 28px;
+  border-radius: 16px;
+  border: 1px solid var(--borde);
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.08);
 }
 
 .form-box h2 {
   color: var(--azul);
-  font-size: 1.35rem;
-  font-weight: 800;
   margin-top: 0;
-  margin-bottom: 22px;
+  margin-bottom: 16px;
+  font-size: 1.2rem;
+  font-weight: 700;
 }
 
+/* Inputs */
 label {
-  display: block;
-  margin-bottom: 6px;
-  margin-top: 15px;
   font-weight: 600;
-  color: var(--texto-suave);
+  display: block;
+  margin-top: 12px;
+  margin-bottom: 4px;
 }
 
 input {
   width: 100%;
-  padding: 13px 15px;
-  border-radius: 12px;
+  padding: 11px 13px;
+  border-radius: 10px;
   border: 1px solid var(--borde);
-  background: #ffffff;
-  transition: 0.3s;
-  font-size: 1rem;
+  background: #fff;
+  transition: all 0.2s;
 }
 
 input:focus {
   border-color: var(--azul);
-  box-shadow: 0 0 0 4px rgba(0,119,182,0.15);
+  box-shadow: 0 0 0 3px rgba(0,119,182,0.15);
   outline: none;
 }
 
-/* BOTÓN GUARDAR */
-.btn-primary {
-  width: 100%;
-  margin-top: 24px;
-  padding: 14px 18px;
-  background: var(--azul);
+/* Botones Principales */
+.btn-primary, .btn-secondary {
   border: none;
   color: white;
-  font-weight: 800;
-  border-radius: 14px;
-  cursor: pointer;
+  padding: 12px 18px;
+  border-radius: 12px;
+  margin-top: 22px;
   font-size: 1rem;
-  transition: 0.25s;
+  cursor: pointer;
+  width: 100%;
+  font-weight: 700;
+  transition: background 0.25s;
+}
+
+.btn-primary {
+  background: var(--azul);
 }
 
 .btn-primary:hover {
   background: var(--azul-oscuro);
 }
 
+/* Nuevo Estilo para Botón Secundario (Limpiar) */
+.btn-secondary {
+  background: #ccc; /* Gris para indicar acción secundaria */
+  color: var(--gris-texto);
+  margin-top: 10px; /* Menos espacio que el principal */
+}
+
+.btn-secondary:hover {
+  background: #b0b0b0;
+}
+
+
 /* ===========================
-   CATÁLOGO
+   PANEL DERECHO (CATÁLOGO)
    =========================== */
 .content {
-  width: 100%;
+  flex: 1;
 }
 
 .titulo-seccion {
-  font-size: 1.65rem;
   color: var(--azul-oscuro);
-  font-weight: 800;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
+  margin-top: 5px;
+  font-size: 1.35rem;
+  font-weight: 700;
 }
 
 /* GRID */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 35px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 22px;
+  padding: 10px 5px 40px;
 }
 
-/* TARJETAS */
+/* PRODUCT CARD */
 .card {
-  background: white;
-  border-radius: 18px;
+  background: var(--white);
   border: 1px solid var(--borde);
+  border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0px 6px 20px rgba(0,0,0,0.08);
-  transition: 0.25s ease;
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.06);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0px 12px 30px rgba(0,0,0,0.12);
+  transform: translateY(-6px);
+  box-shadow: 0px 12px 22px rgba(0,0,0,0.10);
 }
 
 .card img {
   width: 100%;
   height: 200px;
   object-fit: cover;
-  background: #e2e8f0;
+  background: #f0f0f0;
 }
 
 .card h3 {
-  margin: 14px;
-  font-size: 1.15rem;
+  margin: 10px 14px 6px;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--azul-oscuro);
 }
 
 .card p {
   margin: 4px 14px;
-  color: var(--texto-suave);
-  font-size: 0.92rem;
+  font-size: 0.9rem;
 }
 
-/* BOTONES TARJETA */
-.btn-edit,
-.btn-delete {
+/* ACTION BUTTONS */
+.btn-edit, .btn-delete {
   display: inline-block;
-  padding: 9px 16px;
-  margin: 12px;
+  padding: 8px 14px;
   border-radius: 10px;
-  font-size: 0.9rem;
-  font-weight: 700;
+  font-size: 0.88rem;
   cursor: pointer;
-  transition: 0.25s;
+  font-weight: 700;
+  margin: 10px 12px 14px;
 }
 
 .btn-edit {
   background: var(--azul);
   color: #fff;
 }
+
 .btn-edit:hover {
   background: var(--azul-oscuro);
 }
 
 .btn-delete {
-  background: #ff4b5c;
+  background: #e63946;
   color: #fff;
 }
+
 .btn-delete:hover {
-  background: #d90429;
+  background: #c1121f;
+}
+
+/* ===========================
+   RESPONSIVE
+   =========================== */
+@media (max-width: 992px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    position: static;
+  }
 }
