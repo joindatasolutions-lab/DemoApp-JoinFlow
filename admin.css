@@ -1,14 +1,15 @@
 /* ===========================
-   PALETA JOIN DATA - Join Flow
+   PALETA CORPORATIVA JOIN FLOW
    =========================== */
 :root {
   --azul: #0077b6;
   --azul-oscuro: #003049;
   --verde: #00a884;
-  --bg: #eef3f7;
-  --borde: #d9d9d9;
-  --gris-texto: #2e3a45;
-  --white: #ffffff;
+  --bg: #f3f6fa;
+  --bg-card: #ffffff;
+  --borde: #d6dbe1;
+  --texto: #1e293b;
+  --texto-suave: #475569;
 }
 
 /* ===========================
@@ -19,123 +20,127 @@ body {
   padding: 0;
   font-family: "Inter", sans-serif;
   background: var(--bg);
-  color: var(--gris-texto);
+  color: var(--texto);
 }
 
 /* ===========================
-   TOP BAR
+   TOPBAR
    =========================== */
 .topbar {
-  background: var(--white);
-  border-bottom: 1px solid #ccc;
-  padding: 12px 30px;
-  position: sticky;
-  top: 0;
+  background: var(--bg-card);
+  padding: 20px 35px;
+  border-bottom: 1px solid var(--borde);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 50;
 }
 
 .topbar-left {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
 }
 
 .logo {
-  height: 45px;
+  height: 80px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0px 1px 2px rgba(0,0,0,0.2));
 }
 
 .topbar h1 {
-  font-size: 1.45rem;
+  font-size: 1.8rem;
   margin: 0;
-  font-weight: 700;
+  font-weight: 800;
   color: var(--azul-oscuro);
 }
 
-.tag {
-  background: var(--azul);
-  padding: 6px 14px;
-  border-radius: 20px;
+/* LOGOUT */
+.logout-btn {
+  background: #d90429;
   color: #fff;
+  padding: 10px 20px;
+  border-radius: 12px;
+  border: none;
   font-weight: 700;
-  font-size: 0.8rem;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.logout-btn:hover {
+  background: #9b001a;
 }
 
 /* ===========================
    CONTENEDOR PRINCIPAL
    =========================== */
 .container {
-  display: flex;
-  padding: 30px;
-  gap: 40px;
-  max-width: 1600px;
-  margin: auto;
+  max-width: 1400px;
+  margin: 40px auto;
+  padding: 0 40px;
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 45px;
 }
 
 /* ===========================
-   SIDEBAR (FORMULARIO)
+   SIDEBAR
    =========================== */
-.sidebar {
-  width: 350px;
-  flex-shrink: 0;
-  position: sticky;
-  top: 100px;
-}
-
 .form-box {
-  background: var(--white);
-  padding: 26px 28px;
-  border-radius: 16px;
+  background: var(--bg-card);
+  padding: 32px;
+  border-radius: 20px;
   border: 1px solid var(--borde);
-  box-shadow: 0px 4px 12px rgba(0,0,0,0.08);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  position: sticky;
+  top: 40px;
 }
 
 .form-box h2 {
   color: var(--azul);
+  font-size: 1.35rem;
+  font-weight: 800;
   margin-top: 0;
-  margin-bottom: 16px;
-  font-size: 1.2rem;
-  font-weight: 700;
+  margin-bottom: 22px;
 }
 
-/* Inputs */
 label {
-  font-weight: 600;
   display: block;
-  margin-top: 12px;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
+  margin-top: 15px;
+  font-weight: 600;
+  color: var(--texto-suave);
 }
 
 input {
   width: 100%;
-  padding: 11px 13px;
-  border-radius: 10px;
+  padding: 13px 15px;
+  border-radius: 12px;
   border: 1px solid var(--borde);
-  background: #fff;
-  transition: all 0.2s;
+  background: #ffffff;
+  transition: 0.3s;
+  font-size: 1rem;
 }
 
 input:focus {
   border-color: var(--azul);
-  box-shadow: 0 0 0 3px rgba(0,119,182,0.15);
+  box-shadow: 0 0 0 4px rgba(0,119,182,0.15);
   outline: none;
 }
 
-/* Botón guardar */
+/* BOTÓN GUARDAR */
 .btn-primary {
+  width: 100%;
+  margin-top: 24px;
+  padding: 14px 18px;
   background: var(--azul);
   border: none;
   color: white;
-  padding: 12px 18px;
-  border-radius: 12px;
-  margin-top: 22px;
-  font-size: 1rem;
+  font-weight: 800;
+  border-radius: 14px;
   cursor: pointer;
-  width: 100%;
-  font-weight: 700;
-  transition: background 0.25s;
+  font-size: 1rem;
+  transition: 0.25s;
 }
 
 .btn-primary:hover {
@@ -143,101 +148,86 @@ input:focus {
 }
 
 /* ===========================
-   PANEL DERECHO (CATÁLOGO)
+   CATÁLOGO
    =========================== */
 .content {
-  flex: 1;
+  width: 100%;
 }
 
 .titulo-seccion {
+  font-size: 1.65rem;
   color: var(--azul-oscuro);
-  margin-bottom: 14px;
-  margin-top: 5px;
-  font-size: 1.35rem;
-  font-weight: 700;
+  font-weight: 800;
+  margin-bottom: 20px;
 }
 
 /* GRID */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 22px;
-  padding: 10px 5px 40px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 35px;
 }
 
-/* PRODUCT CARD */
+/* TARJETAS */
 .card {
-  background: var(--white);
-  border: 1px solid var(--borde);
+  background: white;
   border-radius: 18px;
+  border: 1px solid var(--borde);
   overflow: hidden;
-  box-shadow: 0px 4px 12px rgba(0,0,0,0.06);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0px 6px 20px rgba(0,0,0,0.08);
+  transition: 0.25s ease;
 }
 
 .card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0px 12px 22px rgba(0,0,0,0.10);
+  transform: translateY(-8px);
+  box-shadow: 0px 12px 30px rgba(0,0,0,0.12);
 }
 
 .card img {
   width: 100%;
   height: 200px;
   object-fit: cover;
-  background: #f0f0f0;
+  background: #e2e8f0;
 }
 
 .card h3 {
-  margin: 10px 14px 6px;
-  font-size: 1rem;
+  margin: 14px;
+  font-size: 1.15rem;
   font-weight: 700;
   color: var(--azul-oscuro);
 }
 
 .card p {
   margin: 4px 14px;
-  font-size: 0.9rem;
+  color: var(--texto-suave);
+  font-size: 0.92rem;
 }
 
-/* ACTION BUTTONS */
-.btn-edit, .btn-delete {
+/* BOTONES TARJETA */
+.btn-edit,
+.btn-delete {
   display: inline-block;
-  padding: 8px 14px;
+  padding: 9px 16px;
+  margin: 12px;
   border-radius: 10px;
-  font-size: 0.88rem;
-  cursor: pointer;
+  font-size: 0.9rem;
   font-weight: 700;
-  margin: 10px 12px 14px;
+  cursor: pointer;
+  transition: 0.25s;
 }
 
 .btn-edit {
   background: var(--azul);
   color: #fff;
 }
-
 .btn-edit:hover {
   background: var(--azul-oscuro);
 }
 
 .btn-delete {
-  background: #e63946;
+  background: #ff4b5c;
   color: #fff;
 }
-
 .btn-delete:hover {
-  background: #c1121f;
-}
-
-/* ===========================
-   RESPONSIVE
-   =========================== */
-@media (max-width: 992px) {
-  .container {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    width: 100%;
-    position: static;
-  }
+  background: #d90429;
 }

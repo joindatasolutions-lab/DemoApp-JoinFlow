@@ -3,27 +3,40 @@
 <head>
 <meta charset="UTF-8">
 <title>Admin – Join Flow</title>
+
+<!-- Protege acceso -->
+<script>
+  if (localStorage.getItem("admin_auth") !== "true") {
+    window.location.href = "login.html";
+  }
+</script>
+
 <link rel="stylesheet" href="admin.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
 
-<!-- ====== BARRA SUPERIOR ====== -->
+<!-- ========================== -->
+<!--    TOP BAR CORPORATIVA     -->
+<!-- ========================== -->
 <header class="topbar">
   <div class="topbar-left">
     <img src="img/flow-removebg-preview.png" class="logo" alt="Join Flow Logo">
     <h1>Panel Administrador</h1>
   </div>
+
   <div class="topbar-right">
-    <span class="tag">Catálogo</span>
+    <button class="logout-btn" onclick="logout()">Cerrar sesión</button>
   </div>
 </header>
 
-<!-- ====== CONTENEDOR PRINCIPAL ====== -->
+<!-- ========================== -->
+<!--    CONTENEDOR PRINCIPAL    -->
+<!-- ========================== -->
 <div class="container">
 
-  <!-- ====== FORMULARIO ====== -->
+  <!-- ======= SIDEBAR (FORM) ======= -->
   <div class="sidebar">
     <div class="form-box">
       <h2>Agregar / Editar Producto</h2>
@@ -47,7 +60,7 @@
     </div>
   </div>
 
-  <!-- ====== LISTA DE PRODUCTOS ====== -->
+  <!-- ======= CATÁLOGO ======= -->
   <div class="content">
     <h2 class="titulo-seccion">Catálogo actual</h2>
     <div id="listaProductos" class="grid"></div>
@@ -58,4 +71,3 @@
 <script src="admin.js"></script>
 </body>
 </html>
-

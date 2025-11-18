@@ -85,4 +85,9 @@ async function eliminar(id) {
   cargarCatalogo();
 }
 
+function logout() {
+  localStorage.removeItem("admin_auth");
+  window.location.href = "login.html";
+}
+
 cargarCatalogo();
