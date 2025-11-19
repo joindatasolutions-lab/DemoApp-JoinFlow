@@ -364,6 +364,18 @@ input:focus {
     font-size: 0.9rem;
 }
 
+/* === AJUSTE PARA EL INPUT DE TIPO FILE === */
+input[type="file"] {
+  /* Estilos para el input file */
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #fff;
+  cursor: pointer;
+}
+
 
 /******************************
  * DISEÑO RESPONSIVE

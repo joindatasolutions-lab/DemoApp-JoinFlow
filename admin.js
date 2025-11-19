@@ -3,7 +3,7 @@
  ******************************/
 
 // 🛑 ATENCIÓN: Reemplaza esto con la URL de tu Google Apps Script implementado
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw7fxSI1ThW9yK2ybfpI9lERFBcuMe-gQPTftek7kBYyLMGyvlXRbiciSkTFgHRMhTm/exec"; 
+const SCRIPT_URL = "LA URL COMPLETA DE TU APPS SCRIPT"; 
 
 const state = {
     catalogo: [], // Almacenará todos los productos
@@ -25,7 +25,10 @@ function closeDrawer() {
     document.getElementById("productDrawer").classList.remove("open");
 }
 
-function updateImagePreview(url) {
+/**
+ * Muestra la imagen de previsualización. Maneja URL de Drive o archivo local (Blob URL).
+ */
+function updateImagePreview(url, isLocalFile = false) {
     const imgElement = document.getElementById("imagePreview");
     const placeholder = document.getElementById("previewPlaceholder");
 
@@ -38,15 +41,42 @@ function updateImagePreview(url) {
         imgElement.style.display = "none";
         placeholder.style.display = "block";
     }
+    // Si se cargó una URL de Blob para un archivo local, debe ser revocada al limpiar.
+    if (!isLocalFile && imgElement.dataset.localUrl) {
+        URL.revokeObjectURL(imgElement.dataset.localUrl);
+        delete imgElement.dataset.localUrl;
+    }
+}
+
+/**
+ * Maneja la previsualización de la imagen seleccionada localmente.
+ */
+function previewLocalImage(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const localUrl = URL.createObjectURL(file);
+        updateImagePreview(localUrl, true);
+        
+        // Guardar la URL local para revocarla después
+        document.getElementById("imagePreview").dataset.localUrl = localUrl;
+        document.getElementById("previewPlaceholder").textContent = `Archivo seleccionado: ${file.name}`;
+        
+        // Limpiar el campo oculto de la URL existente (se subirá una nueva)
+        document.getElementById("imgURL").value = "";
+    } else {
+        // Si el usuario cancela la selección, limpiar la previsualización.
+        updateImagePreview(document.getElementById("imgURL").value);
+        document.getElementById("previewPlaceholder").textContent = "URL de imagen: Ninguna";
+    }
 }
 
 /******************************
- * INICIALIZACIÓN
+ * INICIALIZACIÓN Y RENDER
  ******************************/
 
 async function init() {
     document.getElementById("listaProductos").innerHTML = '';
-
+    // ... (Tu lógica de init() para cargar catálogo sin cambios) ...
     try {
         const res = await fetch(SCRIPT_URL + '?action=getCatalog'); 
         const result = await res.json();
@@ -64,11 +94,8 @@ async function init() {
     }
 }
 
-/******************************
- * RENDERIZADO Y BUSCADOR
- ******************************/
-
 function renderProducts(products) {
+    // ... (Tu lógica de renderProducts() sin cambios) ...
     const grid = document.getElementById("listaProductos");
     grid.innerHTML = "";
 
@@ -114,13 +141,13 @@ document.getElementById("search").addEventListener("input", function(e) {
 });
 
 /******************************
- * MANEJO DEL FORMULARIO
+ * MANEJO DEL FORMULARIO Y EDICIÓN
  ******************************/
 
 function generarNuevoId() {
+    // ... (Tu lógica de generarNuevoId() sin cambios) ...
     if (state.catalogo.length === 0) return "P001";
     
-    // Obtener el ID numérico más alto y sumar 1
     const maxIdNumber = state.catalogo.reduce((max, p) => {
         const num = parseInt(p.id.replace('P', '')) || 0;
         return num > max ? num : max;
@@ -130,37 +157,27 @@ function generarNuevoId() {
     return 'P' + newIdNumber.toString().padStart(3, '0');
 }
 
-/**
- * Función que limpia el formulario y cierra el Drawer (Usada por el botón Cancelar/Cerrar)
- */
 function limpiarFormulario() {
-    // 1. Cierra el panel lateral
     closeDrawer(); 
     
-    // 2. Limpia los campos
+    // 🛑 LIMPIAR TODOS LOS CAMPOS
     document.getElementById("id").value = "";
     document.getElementById("nombre").value = "";
     document.getElementById("precio").value = "";
     document.getElementById("tallas").value = "";
-    document.getElementById("imgURL").value = "";
+    document.getElementById("imgURL").value = ""; // Limpiar el campo oculto
+    document.getElementById("productImageFile").value = ""; // Limpiar el input file
     
-    // 3. Restablece el estado de edición
     document.getElementById("formTitle").textContent = "➕ Agregar Nuevo Producto";
     state.editingId = null;
     
-    // 4. Limpia la previsualización
-    updateImagePreview(""); 
+    updateImagePreview(""); // Limpiar la previsualización
+    document.getElementById("previewPlaceholder").textContent = "URL de imagen: Ninguna";
 }
 
-/**
- * Función que abre el formulario para crear un nuevo producto (Usada por el botón Agregar Nuevo)
- */
 function startNewProduct() {
-    // 1. Limpia cualquier estado de edición anterior
     limpiarFormulario(); 
-    // 2. Abre el drawer
     openDrawer();
-    // 3. El ID ya fue limpiado y reseteado en limpiarFormulario
     document.getElementById("formTitle").textContent = "➕ Agregar Nuevo Producto";
 }
 
@@ -169,60 +186,133 @@ function editarProducto(id) {
     const prod = state.catalogo.find(p => p.id === id);
     if (!prod) return Swal.fire("Error", "Producto no encontrado.", "error");
 
-    // Llenar el formulario.
+    // Llenar los campos
     document.getElementById("id").value = prod.id;
     document.getElementById("nombre").value = prod.nombre;
     document.getElementById("precio").value = prod.precio;
     document.getElementById("tallas").value = prod.tallas;
-    document.getElementById("imgURL").value = prod.imagen; 
     
-    // Mostrar la imagen en la previsualización
-    updateImagePreview(prod.imagen);
+    // 🛑 GESTIÓN DE IMAGEN EN EDICIÓN
+    document.getElementById("imgURL").value = prod.imagen; // Cargar la URL existente al campo oculto
+    document.getElementById("productImageFile").value = ""; // Asegurar que el input de archivo esté vacío
+    updateImagePreview(prod.imagen); // Mostrar la imagen actual
+    document.getElementById("previewPlaceholder").textContent = "URL de imagen: Actual";
 
     state.editingId = id;
     document.getElementById("formTitle").textContent = `✏️ Editando: ${prod.nombre}`;
     
-    // Abrir el panel lateral
     openDrawer();
 }
+
+/******************************
+ * LÓGICA DE SUBIDA DE IMAGEN A DRIVE (NUEVA)
+ ******************************/
+
+/**
+ * Convierte un archivo a Base64 y lo envía al Apps Script para guardar en Drive.
+ * @param {File} file - El objeto File seleccionado.
+ * @returns {Promise<string|null>} La URL pública de Drive o null si falla.
+ */
+async function uploadImageAndGetUrl(file) {
+    // Límite de 5MB
+    const MAX_FILE_SIZE = 5 * 1024 * 1024; 
+    if (file.size > MAX_FILE_SIZE) {
+        Swal.fire("Error", "El archivo es demasiado grande (máx 5MB).", "error");
+        return null;
+    }
+    
+    const reader = new FileReader();
+    
+    // Usar una Promesa para esperar a que la lectura del archivo termine
+    const base64Data = await new Promise((resolve) => {
+        reader.onload = (e) => resolve(e.target.result.split(',')[1]); // Solo la parte Base64
+        reader.readAsDataURL(file);
+    });
+
+    try {
+        const uploadResponse = await fetch(SCRIPT_URL + '?action=uploadFile', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                data: base64Data,
+                mimeType: file.type,
+                fileName: file.name
+            }),
+        });
+
+        const result = await uploadResponse.json();
+
+        if (result.success && result.url) {
+            return result.url; // La URL pública de Google Drive
+        } else {
+            Swal.fire("Error de Subida", result.error || "No se pudo subir el archivo al Drive. Revise el Apps Script.", "error");
+            return null;
+        }
+    } catch (error) {
+        console.error("Error de red durante la subida:", error);
+        Swal.fire("Error de Conexión", "No se pudo contactar al servidor para subir la imagen.", "error");
+        return null;
+    }
+}
+
 
 /******************************
  * ENVÍO DE DATOS (CRUD)
  ******************************/
 
-// Listener para previsualización de imagen al escribir
-document.getElementById("imgURL").addEventListener("input", function(e) {
-    updateImagePreview(e.target.value);
-});
-
-
 async function guardarProducto() {
-    // Validar campos obligatorios
     const nombre = document.getElementById("nombre").value.trim();
     const precio = document.getElementById("precio").value.trim();
     const tallas = document.getElementById("tallas").value.trim();
-    const imagen = document.getElementById("imgURL").value.trim();
     
-    if (!nombre || !precio || !tallas || !imagen) {
-        return Swal.fire("Campos incompletos", "Por favor, completa todos los campos requeridos.", "warning");
+    const fileInput = document.getElementById("productImageFile");
+    const file = fileInput.files[0];
+    const hiddenImgURL = document.getElementById("imgURL");
+    
+    let finalImageUrl = hiddenImgURL.value.trim(); // URL actual de Drive (si es edición sin cambio)
+    
+    // Validar campos de texto
+    if (!nombre || !precio || !tallas) {
+        return Swal.fire("Campos incompletos", "Por favor, completa Nombre, Precio y Tallas.", "warning");
+    }
+
+    // Validar imagen
+    if (!file && !finalImageUrl) {
+        return Swal.fire("Imagen Requerida", "Debes seleccionar una imagen o tener una URL existente (en modo edición).", "warning");
     }
     
     const isNew = !state.editingId;
     const productoId = isNew ? generarNuevoId() : state.editingId;
 
+    const btn = document.querySelector('.btn-primary');
+    btn.disabled = true;
+    btn.textContent = isNew ? "Creando..." : "Actualizando...";
+
+
+    // 🛑 PASO 1: Subir la nueva imagen si se seleccionó un archivo
+    if (file) {
+        btn.textContent = "Subiendo imagen...";
+        const uploadedUrl = await uploadImageAndGetUrl(file);
+        
+        if (!uploadedUrl) {
+            btn.disabled = false;
+            btn.textContent = "💾 Guardar Producto";
+            return; // Falló la subida, detener proceso.
+        }
+        finalImageUrl = uploadedUrl;
+    }
+
+    // 🛑 PASO 2: Guardar los metadatos del producto
     const payload = {
         id: productoId,
         nombre: nombre,
         precio: parseInt(precio),
         tallas: tallas,
-        imagen: imagen, 
+        imagen: finalImageUrl, // Usamos la URL nueva o la existente
     };
 
     const action = isNew ? 'addProduct' : 'updateProduct';
-    
-    const btn = document.querySelector('.btn-primary');
-    btn.disabled = true;
-    btn.textContent = isNew ? "Creando..." : "Actualizando...";
+    btn.textContent = isNew ? "Guardando producto..." : "Actualizando producto...";
 
     try {
         const response = await fetch(SCRIPT_URL + `?action=${action}`, {
@@ -238,20 +328,22 @@ async function guardarProducto() {
                 `El producto ${nombre} ha sido ${isNew ? 'creado' : 'actualizado'} correctamente.`, 
                 "success"
             );
-            limpiarFormulario(); // Cierra el drawer y limpia
-            await init(); // Recargar el catálogo
+            limpiarFormulario();
+            await init(); 
         } else {
             Swal.fire("Error del servidor", result.error || "No se pudo completar la operación.", "error");
         }
 
     } catch (error) {
         console.error("Error de red:", error);
-        Swal.fire("Error de Conexión", "No se pudo contactar al servidor de Apps Script. Verifica la URL.", "error");
+        Swal.fire("Error de Conexión", "Hubo un problema de conexión al guardar los datos.", "error");
     } finally {
         btn.disabled = false;
         btn.textContent = "💾 Guardar Producto";
     }
 }
+
+// ... (eliminarProducto y CARGA INICIAL sin cambios) ...
 
 async function eliminarProducto(id) {
     const prod = state.catalogo.find(p => p.id === id);

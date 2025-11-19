@@ -47,35 +47,28 @@
     
     <div class="drawer-body">
       <form id="productForm" onsubmit="return false">
+        
         <div class="form-group">
           <label for="id">ID de Producto</label>
           <input type="text" id="id" placeholder="Ej: P009" disabled>
           <small class="help-text">El ID se asigna automáticamente.</small>
         </div>
 
-        <div class="form-group">
-          <label for="nombre">Nombre</label>
-          <input type="text" id="nombre" placeholder="Nombre del producto" required>
-        </div>
+        <div class="form-group"><label for="nombre">Nombre</label><input type="text" id="nombre" placeholder="Nombre del producto" required></div>
+        <div class="form-group"><label for="precio">Precio ($)</label><input type="number" id="precio" placeholder="Ej: 35000" required></div>
+        <div class="form-group"><label for="tallas">Tallas / Variantes</label><input type="text" id="tallas" placeholder="Ej: S a XL, 1 a 5, o N/A" required></div>
 
         <div class="form-group">
-          <label for="precio">Precio ($)</label>
-          <input type="number" id="precio" placeholder="Ej: 35000" required>
-        </div>
-
-        <div class="form-group">
-          <label for="tallas">Tallas / Variantes</label>
-          <input type="text" id="tallas" placeholder="Ej: S a XL, 1 a 5, o N/A" required>
-        </div>
-
-        <div class="form-group">
-          <label for="imgURL">URL Imagen (Ruta: img/...)</label>
-          <input type="text" id="imgURL" placeholder="Ej: img/camiseta-azul.jpg" required>
+          <label for="productImageFile">Subir Imagen Local</label>
+          <input type="file" id="productImageFile" accept="image/png, image/jpeg" onchange="previewLocalImage(event)">
+          <small id="imageHelpText" class="help-text">Selecciona una imagen. Si estás editando, déjalo vacío para mantener la imagen actual.</small>
         </div>
         
+        <input type="hidden" id="imgURL" name="imgURL" value="">
+
         <div id="imagePreviewContainer" class="image-preview-container">
           <img id="imagePreview" src="" alt="Previsualización" class="image-preview" style="display:none;">
-          <span id="previewPlaceholder" class="placeholder-text">URL de imagen vacía</span>
+          <span id="previewPlaceholder" class="placeholder-text">URL de imagen: Ninguna</span>
         </div>
 
         <div class="form-actions">
