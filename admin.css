@@ -20,18 +20,8 @@ body {
   line-height: 1.5;
 }
 
-/* === LAYOUT PRINCIPAL === */
-.container {
-  max-width: 1300px;
-  margin: 0 auto;
-  padding: 20px;
-  display: flex;
-  gap: 25px;
-  /* El layout principal ahora es un flexbox */
-}
-
-/* === HEADER (General) === */
-header {
+/* === HEADER (Topbar) === */
+.topbar {
   background-color: #fff;
   border-bottom: 1px solid var(--border-color);
   padding: 15px 20px;
@@ -41,9 +31,19 @@ header {
   box-shadow: var(--shadow);
 }
 
-header h1 {
+.topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.topbar h1 {
   font-size: 1.5rem;
   color: var(--blue-dark);
+}
+
+.logo {
+    height: 35px; /* Ajusta el tamaño del logo */
 }
 
 .btn-catalog {
@@ -60,25 +60,42 @@ header h1 {
   background: var(--blue-dark);
 }
 
-/* === ASIDE (Formulario) === */
-.form-section {
-  flex-shrink: 0; /* No se encoge */
-  width: 380px;
-  background-color: #fff;
-  padding: 25px;
-  border-radius: 15px;
-  box-shadow: var(--shadow);
+/* === LAYOUT PRINCIPAL === */
+.container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
-.form-section h2 {
+/* === MAIN (Catálogo) === */
+.titulo-seccion-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.titulo-seccion {
+  font-size: 1.6rem;
   color: var(--blue-dark);
-  font-size: 1.3rem;
-  padding-bottom: 10px;
-  margin-bottom: 15px;
-  border-bottom: 3px solid var(--blue-primary);
 }
 
-/* === ESTILOS DEL FORMULARIO === */
+.btn-nuevo {
+    padding: 10px 18px !important;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+#search {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+/* === FORMULARIO (BASE) === */
 .form-group {
   margin-bottom: 15px;
 }
@@ -111,7 +128,7 @@ input:focus {
   margin-top: 4px;
 }
 
-/* === BOTONES DEL FORMULARIO === */
+/* === BOTONES GENERALES === */
 .btn {
   padding: 10px 15px;
   border: none;
@@ -124,48 +141,26 @@ input:focus {
 .btn-primary {
   background: var(--blue-primary);
   color: #fff;
-  width: 100%;
-  margin-top: 10px;
 }
 
-.btn-primary:hover {
+.btn-primary:hover:not(:disabled) {
   background: var(--blue-dark);
 }
 
-.btn-clean {
-  background: none;
-  color: #888;
-  font-size: 0.9rem;
-  font-weight: 600;
-  display: block;
-  margin-top: 10px;
-  width: 100%;
-  text-align: center;
+.btn-primary:disabled {
+    background: #ccc;
+    cursor: not-allowed;
 }
 
-.btn-clean:hover {
-  color: var(--blue-primary);
+.btn-outline-secondary {
+    background: #f7f7f7;
+    color: #777;
+    border: 1px solid #ddd;
+}
+.btn-outline-secondary:hover {
+    background: #ebebeb;
 }
 
-
-/* === MAIN (Catálogo) === */
-.catalog-section {
-  flex-grow: 1; /* Ocupa el espacio restante */
-}
-
-.catalog-section h2 {
-  font-size: 1.3rem;
-  color: var(--blue-dark);
-  margin-bottom: 15px;
-}
-
-#search {
-  width: 100%;
-  padding: 10px 12px;
-  margin-bottom: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-}
 
 /* === GRID DE PRODUCTOS === */
 .product-grid {
@@ -186,7 +181,7 @@ input:focus {
 
 .product-image {
   width: 100%;
-  height: 200px; /* Altura fija para la imagen */
+  height: 200px;
   object-fit: cover;
   background-color: #f7f7f7;
   border-bottom: 1px solid var(--border-color);
@@ -279,89 +274,173 @@ input:focus {
 }
 
 
+/* === DRAWER (MODAL LATERAL) === */
+.drawer-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 400px;
+    height: 100%;
+    background: #fff;
+    box-shadow: -4px 0 12px rgba(0, 0, 0, 0.1);
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.drawer-panel.open {
+    transform: translateX(0);
+}
+
+.drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.drawer-header h2 {
+    margin: 0;
+    font-size: 1.4rem;
+    color: var(--blue-primary);
+}
+
+.btn-close-drawer {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #888;
+}
+.btn-close-drawer:hover { color: var(--blue-dark); }
+
+.drawer-body {
+    padding: 25px;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-outline-secondary {
+    flex-grow: 1;
+}
+.btn-primary {
+    flex-grow: 2;
+}
+
+
+/* === PREVISUALIZACIÓN DE IMAGEN === */
+.image-preview-container {
+    margin-top: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f9f9f9;
+    position: relative;
+}
+
+.image-preview {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.placeholder-text {
+    position: absolute;
+    color: #aaa;
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
+
 /******************************
  * DISEÑO RESPONSIVE
  ******************************/
 
-/* 768px (Tabletas y móviles grandes) */
+/* 900px (Tabletas) */
 @media (max-width: 900px) {
-  .container {
-    flex-direction: column; /* Apila el formulario y el catálogo */
-    padding: 15px;
-    gap: 15px;
-  }
-
-  /* Formulario (Aside) */
-  .form-section {
-    width: 100%; /* Ocupa todo el ancho */
-    order: 2; /* Mueve el formulario debajo del catálogo en vista móvil/tableta */
-  }
-  
-  /* Catálogo (Main) */
-  .catalog-section {
-    order: 1; /* Mueve el catálogo arriba del formulario */
-  }
-
-  /* Grid de productos en tabletas */
-  .product-grid {
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  }
-
-  .product-image {
-    height: 180px;
-  }
+    .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 15px;
+    }
+    .product-image {
+        height: 160px;
+    }
 }
 
 /* 600px (Móviles) */
 @media (max-width: 600px) {
-  header {
-    flex-direction: column;
-    padding: 12px 10px;
-    gap: 8px;
-  }
-  
-  header h1 {
-    font-size: 1.3rem;
-  }
+    .topbar {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .topbar-left h1 {
+        font-size: 1.2rem;
+    }
+    .topbar-right {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
 
-  .form-section {
-    padding: 20px 15px;
-    border-radius: 10px;
-  }
+    .container {
+        padding: 10px;
+    }
+    .titulo-seccion-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .btn-nuevo {
+        width: 100%;
+    }
 
-  /* Grid de productos en móviles pequeños */
-  .product-grid {
-    grid-template-columns: 1fr; /* Una columna */
-  }
+    /* Diseño de lista horizontal para productos en móviles */
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
 
-  .product-card {
-    flex-direction: row; /* Diseño de lista horizontal en lugar de tarjeta vertical */
-    height: 120px;
-  }
+    .product-card {
+        flex-direction: row;
+        min-height: 120px;
+    }
 
-  .product-image {
-    width: 120px;
-    height: 100%;
-    border-bottom: none;
-    border-right: 1px solid var(--border-color);
-  }
+    .product-image {
+        width: 120px;
+        height: auto;
+        border-bottom: none;
+        border-right: 1px solid var(--border-color);
+    }
+    
+    .card-body {
+        padding: 10px;
+    }
+    
+    .card-actions {
+        flex-direction: row; /* Mantener botones en línea si caben */
+        flex-wrap: wrap;
+        margin-top: 5px;
+    }
+    
+    .btn-edit, .btn-delete {
+        padding: 6px 8px;
+        font-size: 0.8rem;
+    }
 
-  .card-body {
-    padding: 10px;
-    justify-content: center;
-  }
-
-  .card-body h3 {
-    font-size: 1rem;
-  }
-
-  .card-actions {
-    flex-direction: column;
-    gap: 4px;
-  }
-  
-  .btn-edit, .btn-delete {
-    padding: 6px 8px;
-    font-size: 0.8rem;
-  }
+    /* El drawer ocupa todo el ancho en móviles */
+    .drawer-panel {
+        width: 100%; 
+    }
 }

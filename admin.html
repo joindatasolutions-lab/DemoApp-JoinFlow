@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin – Join Flow - Gestión de Productos</title>
 <link rel="stylesheet" href="admin.css">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
@@ -14,66 +14,80 @@
 <header class="topbar">
   <div class="topbar-left">
     <img src="img/flow-removebg-preview.png" class="logo" alt="Join Flow Logo">
-    <h1>Panel de Administración Join Flow</h1>
+    <h1>Panel de Administración</h1>
   </div>
   <div class="topbar-right">
-    <span class="user-status">🛍️ Catálogo Admin</span>
+    <a href="index.html" class="btn-catalog">🛒 Ir al Catálogo</a>
   </div>
 </header>
 
-<div class="main-layout">
-
-  <aside class="sidebar">
-    <div class="form-box">
-      <h2 id="formTitle" class="form-title">➕ Agregar / Editar Producto</h2>
-
-      <div class="form-group">
-        <label for="id">ID de Producto</label>
-        <input type="text" id="id" placeholder="Ej: P009" disabled>
-        <small>El ID se genera automáticamente o se usa para editar un producto existente.</small>
-      </div>
-
-      <div class="form-group">
-        <label for="nombre">Nombre</label>
-        <input type="text" id="nombre" placeholder="Nombre del producto">
-      </div>
-
-      <div class="form-group">
-        <label for="precio">Precio</label>
-        <input type="number" id="precio" placeholder="Ej: 35000">
-      </div>
-
-      <div class="form-group">
-        <label for="tallas">Tallas (ej: "S a XL" o "N/A")</label>
-        <input type="text" id="tallas" placeholder="Ej: S a XL, 1 a 5, o N/A">
-      </div>
-
-      <div class="form-group">
-        <label for="imgURL">URL Imagen (img/...)</label>
-        <input type="text" id="imgURL" placeholder="Ej: img/camiseta-azul.jpg">
-      </div>
-
-      <div class="form-actions">
-        <button onclick="guardarProducto()" class="btn btn-primary">💾 Guardar Producto</button>
-        <button onclick="limpiarFormulario()" class="btn btn-secondary">🧹 Limpiar Formulario</button>
-      </div>
-    </div>
-  </aside>
-
-  <main class="content">
-    <h2 class="titulo-seccion">Catálogo Actual</h2>
-    
-    <div class="search-bar">
-      <input type="text" id="search" placeholder="Buscar por nombre o ID...">
+<div class="container main-layout">
+  
+  <main class="content catalog-section">
+    <div class="titulo-seccion-wrapper">
+      <h2 class="titulo-seccion">Catálogo Actual</h2>
+      <button onclick="limpiarFormulario()" class="btn btn-primary btn-nuevo">
+        ➕ Agregar Nuevo Producto
+      </button>
     </div>
     
+    <div class="search-box">
+        <input type="text" id="search" placeholder="Buscar productos por ID o nombre..." />
+    </div>
+
     <div id="listaProductos" class="product-grid">
-      <div class="placeholder-card">Cargando catálogo...</div>
-    </div>
+      </div>
   </main>
 
+  <aside id="productDrawer" class="drawer-panel">
+    <div class="drawer-header">
+      <h2 id="formTitle">➕ Agregar / Editar Producto</h2>
+      <button onclick="limpiarFormulario()" class="btn-close-drawer">✕</button>
+    </div>
+    
+    <div class="drawer-body">
+      <form id="productForm" onsubmit="return false">
+        <div class="form-group">
+          <label for="id">ID de Producto</label>
+          <input type="text" id="id" placeholder="Ej: P009" disabled>
+          <small class="help-text">El ID se asigna automáticamente.</small>
+        </div>
+
+        <div class="form-group">
+          <label for="nombre">Nombre</label>
+          <input type="text" id="nombre" placeholder="Nombre del producto" required>
+        </div>
+
+        <div class="form-group">
+          <label for="precio">Precio ($)</label>
+          <input type="number" id="precio" placeholder="Ej: 35000" required>
+        </div>
+
+        <div class="form-group">
+          <label for="tallas">Tallas / Variantes</label>
+          <input type="text" id="tallas" placeholder="Ej: S a XL, 1 a 5, o N/A" required>
+        </div>
+
+        <div class="form-group">
+          <label for="imgURL">URL Imagen (Ruta: img/...)</label>
+          <input type="text" id="imgURL" placeholder="Ej: img/camiseta-azul.jpg" required>
+        </div>
+        
+        <div id="imagePreviewContainer" class="image-preview-container">
+          <img id="imagePreview" src="" alt="Previsualización" class="image-preview" style="display:none;">
+          <span id="previewPlaceholder" class="placeholder-text">URL de imagen vacía</span>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" onclick="guardarProducto()" class="btn btn-primary">💾 Guardar Producto</button>
+          <button type="button" onclick="limpiarFormulario()" class="btn btn-outline-secondary">❌ Cancelar</button>
+        </div>
+      </form>
+      </div>
+  </aside>
+  
 </div>
 
-<script src="admin.js"></script>
 </body>
+<script src="admin.js"></script>
 </html>

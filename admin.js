@@ -10,8 +10,35 @@ const state = {
     editingId: null, // ID del producto que se está editando
 };
 
-// Función de formato de moneda (asumiendo que viene de tu script.js)
+// Función de formato de moneda (usada en el catálogo)
 const fmtCOP = v => Number(v || 0).toLocaleString('es-CO');
+
+/******************************
+ * HELPERS DE UI
+ ******************************/
+
+function openDrawer() {
+    document.getElementById("productDrawer").classList.add("open");
+}
+
+function closeDrawer() {
+    document.getElementById("productDrawer").classList.remove("open");
+}
+
+function updateImagePreview(url) {
+    const imgElement = document.getElementById("imagePreview");
+    const placeholder = document.getElementById("previewPlaceholder");
+
+    if (url && url.trim()) {
+        imgElement.src = url.trim();
+        imgElement.style.display = "block";
+        placeholder.style.display = "none";
+    } else {
+        imgElement.src = "";
+        imgElement.style.display = "none";
+        placeholder.style.display = "block";
+    }
+}
 
 /******************************
  * INICIALIZACIÓN
@@ -21,26 +48,25 @@ async function init() {
     document.getElementById("listaProductos").innerHTML = '';
 
     try {
-        // Cambiado de action=read a action=getCatalog (según tu Apps Script)
         const res = await fetch(SCRIPT_URL + '?action=getCatalog'); 
         const result = await res.json();
         
-        // El Apps Script devuelve un array directo, NO { catalogo: [] }
         if (Array.isArray(result)) {
+            // Ordenar por ID para un mejor UX
             state.catalogo = result.sort((a, b) => a.id.localeCompare(b.id)); 
             renderProducts(state.catalogo);
         } else {
             document.getElementById("listaProductos").innerHTML = 
-                '<p class="error-msg">❌ Error al cargar el catálogo. Asegúrate que tu Apps Script retorna el array de productos.</p>';
+                '<p class="error-msg">❌ Error al cargar el catálogo. Verifica la URL y la respuesta de tu Apps Script.</p>';
         }
     } catch (error) {
         console.error("Error al cargar datos:", error);
-        Swal.fire("Error", "No se pudo cargar el catálogo desde el servidor.", "error");
+        Swal.fire("Error", "No se pudo cargar el catálogo desde el servidor. Revisa tu conexión y el Apps Script.", "error");
     }
 }
 
 /******************************
- * RENDERIZADO, BUSCADOR, Y LÓGICA DEL FORMULARIO (Sin cambios mayores)
+ * RENDERIZADO Y BUSCADOR
  ******************************/
 
 function renderProducts(products) {
@@ -53,7 +79,7 @@ function renderProducts(products) {
     }
 
     products.forEach(prod => {
-        // Usamos prod.imagen para coincidir con el nombre de columna en tu Apps Script/Sheet
+        // Usamos prod.imagen para coincidir con el nombre de columna/campo
         const imgUrl = prod.imagen || 'img/placeholder.jpg'; 
 
         const card = document.createElement("div");
@@ -89,28 +115,45 @@ document.getElementById("search").addEventListener("input", function(e) {
     renderProducts(filtered);
 });
 
+/******************************
+ * MANEJO DEL FORMULARIO
+ ******************************/
+
+function generarNuevoId() {
+    if (state.catalogo.length === 0) return "P001";
+    
+    // Obtener el ID numérico más alto y sumar 1
+    const maxIdNumber = state.catalogo.reduce((max, p) => {
+        const num = parseInt(p.id.replace('P', '')) || 0;
+        return num > max ? num : max;
+    }, 0);
+    
+    const newIdNumber = maxIdNumber + 1;
+    return 'P' + newIdNumber.toString().padStart(3, '0');
+}
 
 function limpiarFormulario() {
+    // 1. Cierra el panel lateral
+    closeDrawer(); 
+    
+    // 2. Limpia los campos
     document.getElementById("id").value = "";
     document.getElementById("nombre").value = "";
     document.getElementById("precio").value = "";
     document.getElementById("tallas").value = "";
     document.getElementById("imgURL").value = "";
-    document.getElementById("formTitle").textContent = "➕ Agregar / Editar Producto";
+    
+    // 3. Restablece el estado de edición
+    document.getElementById("formTitle").textContent = "➕ Agregar Nuevo Producto";
     state.editingId = null;
-    document.getElementById("id").disabled = true; 
-}
-
-function generarNuevoId() {
-    if (state.catalogo.length === 0) return "P001";
     
-    // Obtener el último ID y extraer el número
-    const lastProduct = state.catalogo.slice(-1)[0]; 
-    const lastIdNumber = parseInt(lastProduct.id.replace('P', '')) || 0;
+    // 4. Limpia la previsualización
+    updateImagePreview(""); 
     
-    // Incrementar y formatear
-    const newIdNumber = lastIdNumber + 1;
-    return 'P' + newIdNumber.toString().padStart(3, '0');
+    // 5. Abre el Drawer si se llama desde el botón "Agregar Nuevo" (que siempre llama a esta función)
+    if (event.target.classList.contains('btn-nuevo')) {
+        openDrawer();
+    }
 }
 
 
@@ -118,26 +161,39 @@ function editarProducto(id) {
     const prod = state.catalogo.find(p => p.id === id);
     if (!prod) return Swal.fire("Error", "Producto no encontrado.", "error");
 
-    // Llenar el formulario. Usamos 'imagen' para el campo de URL
+    // Llenar el formulario.
     document.getElementById("id").value = prod.id;
     document.getElementById("nombre").value = prod.nombre;
     document.getElementById("precio").value = prod.precio;
     document.getElementById("tallas").value = prod.tallas;
-    document.getElementById("imgURL").value = prod.imagen; // ATENCIÓN: Usamos 'imagen'
+    document.getElementById("imgURL").value = prod.imagen; 
+    
+    // Mostrar la imagen en la previsualización
+    updateImagePreview(prod.imagen);
 
     state.editingId = id;
     document.getElementById("formTitle").textContent = `✏️ Editando: ${prod.nombre}`;
+    
+    // Abrir el panel lateral
+    openDrawer();
 }
 
 /******************************
- * ENVÍO DE DATOS A APPS SCRIPT (AJUSTADO PARA JSON)
+ * ENVÍO DE DATOS (AJUSTADO PARA JSON)
  ******************************/
 
+// Listener para previsualización de imagen al escribir
+document.getElementById("imgURL").addEventListener("input", function(e) {
+    updateImagePreview(e.target.value);
+});
+
+
 async function guardarProducto() {
+    // Validar campos obligatorios
     const nombre = document.getElementById("nombre").value.trim();
     const precio = document.getElementById("precio").value.trim();
     const tallas = document.getElementById("tallas").value.trim();
-    const imagen = document.getElementById("imgURL").value.trim(); // Se renombra a 'imagen'
+    const imagen = document.getElementById("imgURL").value.trim();
     
     if (!nombre || !precio || !tallas || !imagen) {
         return Swal.fire("Campos incompletos", "Por favor, completa todos los campos requeridos.", "warning");
@@ -146,16 +202,15 @@ async function guardarProducto() {
     const isNew = !state.editingId;
     const productoId = isNew ? generarNuevoId() : state.editingId;
 
-    // 🛑 Crear el objeto de datos JSON (IMPORTANTE)
     const payload = {
         id: productoId,
         nombre: nombre,
         precio: parseInt(precio),
         tallas: tallas,
-        imagen: imagen, // Nombre del campo ajustado a 'imagen'
+        imagen: imagen, 
     };
 
-    const action = isNew ? 'addProduct' : 'updateProduct'; // Acción según tu Apps Script
+    const action = isNew ? 'addProduct' : 'updateProduct';
     
     const btn = document.querySelector('.btn-primary');
     btn.disabled = true;
@@ -164,9 +219,8 @@ async function guardarProducto() {
     try {
         const response = await fetch(SCRIPT_URL + `?action=${action}`, {
             method: 'POST',
-            // 🛑 Usar JSON para el Apps Script
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload), // Envía el objeto JSON
+            body: JSON.stringify(payload),
         });
         const result = await response.json();
 
@@ -176,7 +230,7 @@ async function guardarProducto() {
                 `El producto ${nombre} ha sido ${isNew ? 'creado' : 'actualizado'} correctamente.`, 
                 "success"
             );
-            limpiarFormulario();
+            limpiarFormulario(); // Cierra el drawer y limpia
             await init(); // Recargar el catálogo
         } else {
             Swal.fire("Error del servidor", result.error || "No se pudo completar la operación.", "error");
@@ -184,7 +238,7 @@ async function guardarProducto() {
 
     } catch (error) {
         console.error("Error de red:", error);
-        Swal.fire("Error de Conexión", "No se pudo contactar al servidor de Apps Script.", "error");
+        Swal.fire("Error de Conexión", "No se pudo contactar al servidor de Apps Script. Verifica la URL.", "error");
     } finally {
         btn.disabled = false;
         btn.textContent = "💾 Guardar Producto";
@@ -196,8 +250,8 @@ async function eliminarProducto(id) {
     if (!prod) return;
 
     Swal.fire({
-        title: `¿Eliminar ${prod.nombre}?`,
-        text: "Esta acción es irreversible.",
+        title: `¿Eliminar ${prod.nombre} (${id})?`,
+        text: "Esta acción es irreversible y eliminará el producto de la base de datos.",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: '#CC0000',
@@ -207,13 +261,11 @@ async function eliminarProducto(id) {
     }).then(async (result) => {
         if (result.isConfirmed) {
             
-            // 🛑 Enviar ID como JSON en el cuerpo para la acción de Apps Script
             const payload = { id: id };
             
             try {
                 const response = await fetch(SCRIPT_URL + '?action=deleteProduct', {
                     method: 'POST',
-                    // 🛑 Usar JSON para el Apps Script
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload),
                 });
@@ -221,12 +273,13 @@ async function eliminarProducto(id) {
 
                 if (result.success === true) {
                     Swal.fire("Eliminado", `El producto ${prod.nombre} ha sido eliminado.`, "success");
+                    limpiarFormulario(); // Solo para cerrar si estaba abierto, aunque no es crucial aquí
                     await init(); // Recargar el catálogo
                 } else {
                     Swal.fire("Error del servidor", result.error || "No se pudo eliminar el producto.", "error");
                 }
             } catch (error) {
-                Swal.fire("Error de Conexión", "No se pudo contactar al servidor.", "error");
+                Swal.fire("Error de Conexión", "No se pudo contactar al servidor. Verifica la URL.", "error");
             }
         }
     });
