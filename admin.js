@@ -3,7 +3,7 @@
  ******************************/
 
 // 🛑 ATENCIÓN: Reemplaza esto con la URL de tu Google Apps Script implementado
-const SCRIPT_URL = "LA URL COMPLETA DE TU APPS SCRIPT"; 
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw7fxSI1ThW9yK2ybfpI9lERFBcuMe-gQPTftek7kBYyLMGyvlXRbiciSkTFgHRMhTm/exec"; 
 
 const state = {
     catalogo: [], // Almacenará todos los productos
