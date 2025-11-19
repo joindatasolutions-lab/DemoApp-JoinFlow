@@ -2,8 +2,9 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Admin – Join Flow</title>
-<link rel="stylesheet" href="admin.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Ustariz Pizza - Gestión de Catálogo</title> <link rel="stylesheet" href="admin.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
@@ -11,45 +12,64 @@
 
 <header class="topbar">
   <div class="topbar-left">
-    <img src="img/flow-removebg-preview.png" class="logo" alt="Join Flow Logo">
-    <h1>Panel Administrador</h1>
+    <img src="img/flow-removebg-preview.png" class="logo" alt="Admin Logo">
+    <h1>Panel de Gestión de Pizzas</h1>
   </div>
   <div class="topbar-right">
-    <span class="tag">Catálogo</span>
+    <span class="user-status">🍕 Ustariz Admin</span>
   </div>
 </header>
 
-<div class="container">
+<div class="main-layout">
 
-  <div class="sidebar">
+  <aside class="sidebar">
     <div class="form-box">
-      <h2 id="formTitle">Agregar / Editar Producto</h2> 
+      <h2 id="formTitle" class="form-title">➕ Agregar Pizza</h2>
 
-      <label>ID</label>
-      <input type="text" id="id" placeholder="Ej: P009">
+      <div class="form-group">
+        <label for="id">ID de Producto</label>
+        <input type="text" id="id" placeholder="Ej: PIZ-009" disabled>
+        <small>El ID se genera automáticamente o se usa para editar.</small>
+      </div>
 
-      <label>Nombre</label>
-      <input type="text" id="nombre" placeholder="Nombre del producto">
+      <div class="form-group">
+        <label for="nombre">Nombre de la Pizza</label>
+        <input type="text" id="nombre" placeholder="Ej: Pizza Hawaiana">
+      </div>
 
-      <label>Precio</label>
-      <input type="number" id="precio" placeholder="Ej: 35000">
+      <div class="form-group">
+        <label for="precio">Precio (COP)</label>
+        <input type="number" id="precio" placeholder="Ej: 35000">
+      </div>
 
-      <label>Tallas (ej: "S a XL" o "N/A")</label>
-      <input type="text" id="tallas" placeholder="Ej: S a XL">
+      <div class="form-group">
+        <label for="ingredientes">Ingredientes Clave (separados por coma)</label>
+        <input type="text" id="ingredientes" placeholder="Ej: Jamón, Piña, Queso Mozzarella">
+      </div>
 
-      <label>URL Imagen (img/...)</label>
-      <input type="file" id="imgFile" accept="image/*">
+      <div class="form-group">
+        <label for="imgURL">URL de Imagen (img/...)</label>
+        <input type="text" id="imgURL" placeholder="Ej: img/hawaiana.jpg">
+      </div>
 
-      <button onclick="guardarProducto()" class="btn-primary">Guardar</button>
-      
-      <button onclick="limpiarFormulario()" class="btn-secondary">Limpiar Formulario</button>
+      <div class="form-actions">
+        <button onclick="guardarProducto()" class="btn btn-primary">💾 Guardar Producto</button>
+        <button onclick="limpiarFormulario()" class="btn btn-secondary">🧹 Limpiar / Cancelar</button>
+      </div>
     </div>
-  </div>
+  </aside>
 
-  <div class="content">
-    <h2 class="titulo-seccion">Catálogo actual</h2>
-    <div id="listaProductos" class="grid"></div>
-  </div>
+  <main class="content">
+    <h2 class="titulo-seccion">Catálogo de Pizzas (12 items)</h2>
+    
+    <div class="search-bar">
+      <input type="text" id="search" placeholder="Buscar por nombre o ID de pizza...">
+    </div>
+    
+    <div id="listaProductos" class="product-grid">
+      <div class="placeholder-card">Cargando catálogo...</div>
+    </div>
+  </main>
 
 </div>
 
