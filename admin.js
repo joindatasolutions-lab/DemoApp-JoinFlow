@@ -10,7 +10,7 @@ const state = {
     editingId: null, // ID del producto que se está editando
 };
 
-// Función de formato de moneda (usada en el catálogo)
+// Función de formato de moneda 
 const fmtCOP = v => Number(v || 0).toLocaleString('es-CO');
 
 /******************************
@@ -52,7 +52,6 @@ async function init() {
         const result = await res.json();
         
         if (Array.isArray(result)) {
-            // Ordenar por ID para un mejor UX
             state.catalogo = result.sort((a, b) => a.id.localeCompare(b.id)); 
             renderProducts(state.catalogo);
         } else {
@@ -79,7 +78,6 @@ function renderProducts(products) {
     }
 
     products.forEach(prod => {
-        // Usamos prod.imagen para coincidir con el nombre de columna/campo
         const imgUrl = prod.imagen || 'img/placeholder.jpg'; 
 
         const card = document.createElement("div");
@@ -132,6 +130,9 @@ function generarNuevoId() {
     return 'P' + newIdNumber.toString().padStart(3, '0');
 }
 
+/**
+ * Función que limpia el formulario y cierra el Drawer (Usada por el botón Cancelar/Cerrar)
+ */
 function limpiarFormulario() {
     // 1. Cierra el panel lateral
     closeDrawer(); 
@@ -149,11 +150,18 @@ function limpiarFormulario() {
     
     // 4. Limpia la previsualización
     updateImagePreview(""); 
-    
-    // 5. Abre el Drawer si se llama desde el botón "Agregar Nuevo" (que siempre llama a esta función)
-    if (event.target.classList.contains('btn-nuevo')) {
-        openDrawer();
-    }
+}
+
+/**
+ * Función que abre el formulario para crear un nuevo producto (Usada por el botón Agregar Nuevo)
+ */
+function startNewProduct() {
+    // 1. Limpia cualquier estado de edición anterior
+    limpiarFormulario(); 
+    // 2. Abre el drawer
+    openDrawer();
+    // 3. El ID ya fue limpiado y reseteado en limpiarFormulario
+    document.getElementById("formTitle").textContent = "➕ Agregar Nuevo Producto";
 }
 
 
@@ -179,7 +187,7 @@ function editarProducto(id) {
 }
 
 /******************************
- * ENVÍO DE DATOS (AJUSTADO PARA JSON)
+ * ENVÍO DE DATOS (CRUD)
  ******************************/
 
 // Listener para previsualización de imagen al escribir
@@ -273,7 +281,7 @@ async function eliminarProducto(id) {
 
                 if (result.success === true) {
                     Swal.fire("Eliminado", `El producto ${prod.nombre} ha sido eliminado.`, "success");
-                    limpiarFormulario(); // Solo para cerrar si estaba abierto, aunque no es crucial aquí
+                    limpiarFormulario();
                     await init(); // Recargar el catálogo
                 } else {
                     Swal.fire("Error del servidor", result.error || "No se pudo eliminar el producto.", "error");
